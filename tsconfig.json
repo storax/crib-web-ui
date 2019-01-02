@@ -1,14 +1,12 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "es6",
     "moduleResolution": "node",
     "newLine": "LF",
     "outDir": "./lib/",
-    "target": "es5",
+    "target": "es6",
     "sourceMap": true,
     "declaration": true,
-    "jsx": "preserve",
-    "lib": ["es2017", "dom"],
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
