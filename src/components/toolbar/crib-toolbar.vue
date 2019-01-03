@@ -22,11 +22,11 @@ export default class Toolbar extends Vue {
   @State('authentication.user') user
 
   get logbtnText() {
-    return (this.isAuthenticated ? 'Logout' : 'Login')
+    return (this.$store.state.authentication.status.loggedIn ? 'Logout ' + this.username : 'Login')
   }
 
   get username() {
-    return this.user ? this.user.username : ''
+    return this.$store.state.authentication.user ? this.$store.state.authentication.user.username : ''
   }
 }
 

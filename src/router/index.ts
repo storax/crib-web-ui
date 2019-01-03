@@ -25,13 +25,13 @@ const router = new Router({ routes })
 
 export default router
 
-// router.beforeEach((to, _from, next) => {
-//   const publicPages: string[] = ['/login']
-//   const authRequired: boolean = !publicPages.includes(to.path)
-//   const user = localStorage.getItem('user')
-//   if (authRequired && !user) {
-//     return next('/login')
-//   }
+router.beforeEach((to, _from, next) => {
+  const publicPages: string[] = ['/login']
+  const authRequired: boolean = !publicPages.includes(to.path)
+  const user = localStorage.getItem('user')
+  if (authRequired && !user) {
+    return next('/login')
+  }
 
-//   next()
-// })
+  next()
+})

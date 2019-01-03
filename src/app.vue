@@ -21,7 +21,7 @@ import { Route } from 'vue-router'
 import { State } from 'vuex-class'
 import { VAlert } from 'vuetify/lib'
 
-import Toolbar from './components/toolbar/crib-toolbar.vue'
+import Toolbar from './components/toolbar/Toolbar.vue'
 
 @Component({components: {Toolbar}})
 export default class App extends Vue {
@@ -30,5 +30,9 @@ export default class App extends Vue {
   @State('alert.type') alerttype
   @State('alert.message') alertmessage
   
+  @Watch('$route', { immediate: true, deep: true })
+  onUrlChange(newVal: any) {
+    this.$store.dispatch('alert/clear')
+  }
 }
 </script>
