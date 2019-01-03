@@ -11,11 +11,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import { State } from 'vuex-class'
 
 @Component
-export default class Essential extends Vue {
-  @State('essential') list: Types.Link[]
+export default class Toolbar extends Vue {
+  @Prop(String) title!: string
+  
+  @State('authentication.status.loggedIn') isAuthenticated
+  @State('authentication.user') user
+
+  get logbtnText() {
+    return (this.isAuthenticated ? 'Logout' : 'Login')
+  }
+
+  get username() {
+    return this.user ? this.user.username : ''
+  }
 }
+
 </script>

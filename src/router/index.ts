@@ -1,23 +1,37 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-Vue.use(Router)
+import LoginPage from '../components/login/LoginPage.vue'
+import PropertyViewer from '../components/propViewer/PropertyViewer.vue'
 
-import essential from '../components/essential/essential.vue'
-import ecosystem from '../components/ecosystem/ecosystem.vue'
+Vue.use(Router)
 
 const routes = [
   {
-    name: 'essential',
-    path: '/essential',
-    component: essential
+    path: '/login',
+    component: LoginPage
   },
   {
-    name: 'ecosystem',
-    path: '/ecosystem',
-    component: ecosystem
+    path: '/',
+    component: PropertyViewer
   },
-  { path: '*', redirect: '' }
+  {
+    path: '*',
+    redirect: '/'
+  }
 ]
 
-export default new Router({ routes })
+const router = new Router({ routes })
+
+export default router
+
+// router.beforeEach((to, _from, next) => {
+//   const publicPages: string[] = ['/login']
+//   const authRequired: boolean = !publicPages.includes(to.path)
+//   const user = localStorage.getItem('user')
+//   if (authRequired && !user) {
+//     return next('/login')
+//   }
+
+//   next()
+// })

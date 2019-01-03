@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "module": "es6",
+    "module": "ESNext",
     "moduleResolution": "node",
     "newLine": "LF",
     "outDir": "./lib/",
+    "lib": ["DOM", "ES7"],
     "target": "es6",
     "sourceMap": true,
     "declaration": true,
@@ -11,6 +12,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
