@@ -1,4 +1,5 @@
 import { Module } from 'vuex'
+import { getters } from './getters'
 import { actions } from './actions'
 import { mutations } from './mutations'
 import { AuthState, User } from './types'
@@ -16,6 +17,7 @@ const namespaced: boolean = true
 export const authentication: Module<AuthState, RootState> = {
   namespaced,
   state,
+  getters,
   actions,
   mutations
 }

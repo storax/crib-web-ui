@@ -1,17 +1,17 @@
 import { MutationTree } from 'vuex'
-import { AlertState } from './types'
+import { AlertState, AlertType } from './types'
 
 export const mutations: MutationTree<AlertState> = {
   success (state, message: string) {
-    state.type = 'success'
+    state.type = AlertType.success
     state.message = message
   },
   error (state, message: string) {
-    state.type = 'error'
+    state.type = AlertType.error
     state.message = message
   },
   clear (state) {
-    state.type = ''
+    state.type = null
     state.message = ''
   }
 }

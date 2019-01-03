@@ -17,22 +17,24 @@
 
 <script lang="ts">
 import { Component, Vue, Watch} from 'vue-property-decorator'
-import { Route } from 'vue-router'
-import { State } from 'vuex-class'
+import { State, namespace } from 'vuex-class'
 import { VAlert } from 'vuetify/lib'
 
 import Toolbar from './components/toolbar/Toolbar.vue'
 
+const alertns = namespace('alert')
+
 @Component({components: {Toolbar}})
 export default class App extends Vue {
   title: string = 'Crib'
-  
-  @State('alert.type') alerttype
-  @State('alert.message') alertmessage
-  
+
+  @alertns.State('type') alerttype
+  @alertns.State('message') alertmessage
+
   @Watch('$route', { immediate: true, deep: true })
-  onUrlChange(newVal: any) {
+  onUrlChange (newVal: any) {
     this.$store.dispatch('alert/clear')
   }
 }
+
 </script>

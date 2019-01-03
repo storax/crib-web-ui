@@ -1,4 +1,11 @@
 export interface AlertState {
-  type: string
+  type: AlertType | null
   message: string
+}
+
+export enum AlertType {
+  success = 'success',
+  warning = 'warning',
+  info = 'info',
+  error = 'error'
 }

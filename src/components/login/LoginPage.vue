@@ -5,7 +5,7 @@
       <h2>Login</h2>
     </v-flex>
     <v-flex>
-      <v-form>
+      <v-form @submit="authenticate">
         <v-text-field
           v-validate="'required'"
           v-model="username"
@@ -25,7 +25,7 @@
           data-vv-name="password"
           required
           ></v-text-field>
-        <v-btn @click="authenticate" :disabled="loggingIn">Login</v-btn>
+        <v-btn type="submit" :disabled="loggingIn">Login</v-btn>
         <v-progress-circular v-if="loggingIn"
                              indeterminate
     color="primary"
@@ -37,29 +37,34 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { State } from 'vuex-class'
+  import { Component, Vue } from 'vue-property-decorator'
+import { namespace } from 'vuex-class'
 import VeeValidate from 'vee-validate'
 
 Vue.use(VeeValidate);
 
+const authns = namespace('authentication')
+const alertns = namespace('alert')
+
 @Component
 export default class LoginPage extends Vue {
   username: string = ''
-  password: stirng = ''
-
-  @State('authentication.status.loggingIn') loggingIn
+  password: string = ''
+  
+  @authns.Getter('loggingIn') loggingIn
+  @authns.Action('logout') logout
+  @authns.Action('login') login
+  @alertns.Action('clear') clearAlert
 
   created () {
-    this.$store.dispatch('authentication/logout')
+    this.logout()
   }
 
   authenticate () {
     const { username, password } = this
-    const { dispatch } = this.$store
     if (username && password) {
-      dispatch('alert/clear')
-      dispatch('authentication/login', { username, password })
+      this.clearAlert()
+      this.login({ username, password })
     }
   }
 }

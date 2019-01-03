@@ -12,22 +12,21 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { State } from 'vuex-class'
+import { Getter, namespace } from 'vuex-class'
+
+const authns = namespace('authentication')
 
 @Component
 export default class Toolbar extends Vue {
   @Prop(String) title!: string
   
-  @State('authentication.status.loggedIn') isAuthenticated
-  @State('authentication.user') user
+  @authns.Getter('loggedIn') isAuthenticated
+  @authns.Getter('username') username
 
   get logbtnText() {
-    return (this.$store.state.authentication.status.loggedIn ? 'Logout ' + this.username : 'Login')
+    return (this.isAuthenticated ? 'Logout ' + this.username : 'Login')
   }
 
-  get username() {
-    return this.$store.state.authentication.user ? this.$store.state.authentication.user.username : ''
-  }
 }
 
 </script>

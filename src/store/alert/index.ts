@@ -5,7 +5,7 @@ import { AlertState } from './types'
 import { RootState } from '../types'
 
 export const state: AlertState = {
-  type: '',
+  type: null,
   message: ''
 }
 
