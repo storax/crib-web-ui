@@ -26,7 +26,5 @@ export default class Toolbar extends Vue {
   get logbtnText() {
     return (this.isAuthenticated ? 'Logout ' + this.username : 'Login')
   }
-
 }
-
 </script>

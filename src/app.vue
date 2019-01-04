@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="fullheight">
     <v-container fluid class="ma-0 pa-0">
     <Toolbar :title="title"></Toolbar>
     <v-container fluid class="ma-0 pa-0">
@@ -38,3 +38,9 @@ export default class App extends Vue {
 }
 
 </script>
+
+<style scoped>
+  .fullheight {
+  max-height: 100vh
+  }
+</style>

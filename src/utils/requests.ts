@@ -19,8 +19,9 @@ export const authInspector = cribReq.interceptors.request.use((config: any) => {
 export const errorInterceptor = cribReq.interceptors.response.use(
   (response: any) => { return response },
   (error: any) => {
-    error.message = error.response.data.msg || error.message
-    console.log('Response error', error.response.status, error.response.data, error.response.headers)
+    if (error.response && error.response.data.msg) {
+      error.message = error.response.data.msg
+    }
     return Promise.reject(error)
   }
 )
