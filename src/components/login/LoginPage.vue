@@ -1,7 +1,7 @@
 <template>
-<v-container>
+<v-container fluid fill-height>
   <v-layout justify-center align-center column>
-    <v-flex>
+    <v-flex shrink>
       <h2>Login</h2>
     </v-flex>
     <v-flex>
@@ -28,11 +28,11 @@
         <v-btn type="submit" :disabled="loggingIn">Login</v-btn>
         <v-progress-circular v-if="loggingIn"
                              indeterminate
-    color="primary"
-  ></v-progress-circular>
-  </v-form>
-</v-flex>
-</v-layout>
+                             color="primary"
+        ></v-progress-circular>
+      </v-form>
+    </v-flex>
+  </v-layout>
 </v-container>
 </template>
 

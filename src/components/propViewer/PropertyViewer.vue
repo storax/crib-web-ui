@@ -1,34 +1,24 @@
 <template>
-  <v-container class="pa-0" fluid fill-height>
-        <v-layout column>
-          <v-flex shrink>
-            <v-progress-linear
-              class="ma-0"
-              v-if="gettingProperties"
-              color="secondary"
-              :indeterminate="true">
-            </v-progress-linear>
-          </v-flex>
-          <v-layout row>
-            <v-flex md4 d-flex>
-              <v-card class="scroll" max-height="100vh">
-              <pre>{{ propertiesJSON }}</pre>
-              </v-card>
-            </v-flex>
-            <v-flex grow d-flex>
-              <l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center">
-                <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-                <l-marker
-                  v-for="item in properties"
-                  :lat-lng="[item.location.latitude, item.location.longitude]"
-                  :key="item.id">
-                  <l-popup > {{ item.price.amount }} {{ item.price.frequency}}</l-popup>
-                  <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
-                </l-marker>
-              </l-map>
-            </v-flex>
-          </v-layout>
-        </v-layout>
+  <v-container fluid fill-height pa-0>
+    <v-layout>
+      <v-flex>
+        <l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center">
+          <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+          <l-marker
+            v-for="item in properties"
+            :lat-lng="[item.location.latitude, item.location.longitude]"
+            :key="item.id">
+            <l-popup > {{ item.price.amount }} {{ item.price.frequency}}</l-popup>
+            <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
+          </l-marker>
+        </l-map>
+      </v-flex>
+      <v-flex md4>
+        <v-card class="scroll" max-height="100%">
+          <v-card-text><pre>{{ propertiesJSON }}</pre></v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -80,6 +70,6 @@ export default class PropertyViewer extends Vue {
 </script>
 <style scoped>
 .scroll {
-  overflow: auto;
+  overflow: auto
 }
 </style>
