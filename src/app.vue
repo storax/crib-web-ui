@@ -1,5 +1,5 @@
 <template>
-  <v-app dark id="crib">
+  <v-app dark>
     <Toolbar :title="title"></Toolbar>
     <v-content class="maxheight">
       <GlobalAlert></GlobalAlert>
@@ -32,9 +32,6 @@ export default class App extends Vue {
 }
 </script>
 <style scoped>
-#crib {
-  max-height: 100vh;
-}
 .maxheight {
 max-height: 100vh;
 }
