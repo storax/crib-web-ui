@@ -6,7 +6,7 @@
       ref="swiperTop"
       v-if="images">
       <swiper-slide v-for="(image, index) in images" :key="index">
-        <v-img :src="image" contain max-height="100%">
+        <v-img :src="image" contain max-height="100%" :aspect-ratio="656/437">
       </swiper-slide>
       <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
       <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
@@ -17,7 +17,7 @@
       ref="swiperThumbs"
       v-if="images">
       <swiper-slide v-for="(image, index) in images" :key="index">
-        <v-img :src="image" class="thumb-image" height="100%">
+        <v-img :src="image" class="thumb-image" height="100%" contain :aspect-ratio="656/437">
       </swiper-slide>
     </swiper>
   </div>

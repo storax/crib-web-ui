@@ -4,8 +4,9 @@
   <l-marker
     v-for="item in properties"
     :lat-lng="[item.location.latitude, item.location.longitude]"
-    :key="item.id">
-    <l-popup > {{ item.price.amount }} {{ item.price.frequency}}</l-popup>
+    :key="item.id"
+    v-on:click="$emit('propertyClicked', item)"
+    >
     <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
   </l-marker>
 </l-map>

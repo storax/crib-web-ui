@@ -3,7 +3,7 @@
     <v-layout column>
       <v-layout style="max-height: 100%">
         <v-flex>
-          <Map></Map>
+          <Map v-on:propertyClicked="showProperty($event)"></Map>
         </v-flex>
         <v-flex md4 class="scroll">
           <PropertyDetails
@@ -41,12 +41,14 @@ export default class PropertyViewer extends Vue {
   @propns.State('gettingProperties') gettingProperties
   @propns.State('properties') properties
 
+  propToDisplay = this.properties ? this.properties[0] : null
+
   get propertiesJSON () {
     return JSON.stringify(this.properties, undefined, 2)
   }
 
-  get propToDisplay () {
-    return this.properties ? this.properties[0] : null
+  showProperty (prop) {
+    this.propToDisplay = prop
   }
   
   beforeMount () {
