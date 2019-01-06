@@ -8,7 +8,7 @@
       <v-img v-for="(image, index) in images"
              :key="index"
              :src="image"
-             :lazySrc="image"
+             :lazySrc="someImage"
              :aspect-ratio="656/437"
              max-height="100%"
              contain
@@ -23,7 +23,8 @@
       <v-img v-for="(image, index) in images"
              :key="index"
              :src="image"
-             :lazySrc="image"
+             :lazySrc="someImage"
+             alt="Loading"
              :aspect-ratio="656/437"
              max-height="100%"
              contain
@@ -40,11 +41,15 @@ import Slick from 'vue-slick'
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+const placeholder = require('../../assets/placeholder.jpg');
+
 @Component({ components: {
   Slick
 }})
 export default class Carousel extends Vue {
   @Prop(Array) images: string[]
+
+  someImage = placeholder
 
   get mainOptions () {
     return {
