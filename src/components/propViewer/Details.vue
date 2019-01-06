@@ -1,10 +1,7 @@
 <template>
-<v-layout justify-center align-center column>
+<v-layout column>
   <v-flex>
-    <Carousel :images="propertyImages" style="max-width: 1000px"></Carousel>
-  </v-flex>
-  <v-flex>
-    <Carousel :images="floorplanImages" style="max-width: 1000px"></Carousel>
+    <Carousel :images="allImages" style="max-width: 1000px"></Carousel>
   </v-flex>
   <v-flex>
     <div v-html="propertyToView.summary"></div>
@@ -27,8 +24,8 @@ import Carousel from './Carousel'
 export default class PropertyDetails extends Vue {
   @Prop(Property) propertyToView: Property
 
-  get propertyImages () {
-    return this.propertyToView.propertyImages
+  get allImages () {
+    return [ ...this.propertyToView.propertyImages, ...this.floorplanImages ]
   }
 
   get floorplanImages () {

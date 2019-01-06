@@ -80,12 +80,10 @@ export default class Carousel extends Vue {
     const carousels = [this.$refs.mainCarousel, this.$refs.thumbsCarousel]
     for (let carousel of carousels) {
       if carousel {
-        const currIndex = carousel.currentSlide()
         carousel.destroy()
         this.$nextTick(() => {
             if carousel {
               carousel.create()
-              carousel.goTo(currIndex, true)
             }
         })
       }
