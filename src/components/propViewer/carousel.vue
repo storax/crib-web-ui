@@ -5,14 +5,30 @@
       style="max-height: 100%"
       ref="mainCarousel"
       :options="mainOptions">
-      <v-img v-for="(image, index) in images" :key="index" :src="image" contain max-height="100%" :aspect-ratio="656/437">
+      <v-img v-for="(image, index) in images"
+             :key="index"
+             :src="image"
+             :lazySrc="image"
+             :aspect-ratio="656/437"
+             max-height="100%"
+             contain
+             >
+      </v-img>
     </slick>
     <slick
       class="thumbsCarousel"
       style="max-height: 20%"
       ref="thumbsCarousel"
       :options="thumbsOptions">
-      <v-img v-for="(image, index) in images" :key="index" :src="image" contain max-height="100%" :aspect-ratio="656/437">
+      <v-img v-for="(image, index) in images"
+             :key="index"
+             :src="image"
+             :lazySrc="image"
+             :aspect-ratio="656/437"
+             max-height="100%"
+             contain
+             >
+      </v-img>
     </slick>
   </div>
 </template>
@@ -55,11 +71,20 @@ export default class Carousel extends Vue {
 
   @Watch('images', { immediate: true, deep: false })
   onImagesChange(val: string[] oldval: string[]) {
-    this.$nextTick(() => {
-      this.$refs.mainCarousel.reSlick()
-      this.$refs.thumbsCarousel.reSlick()
-    })
+    if this.$refs.mainCarousel {
+      const mainCurrIndex = this.$refs.mainCarousel.currentSlide()
+      const thumbsCurrIndex = this.$refs.thumbsCarousel.currentSlide()
+      this.$refs.mainCarousel.destroy()
+      this.$refs.thumbsCarousel.destroy()
+      this.$nextTick(() => {
+          this.$refs.mainCarousel.create()
+          this.$refs.thumbsCarousel.create()
+          this.$refs.mainCarousel.goTo(mainCurrIndex, true)
+          this.$refs.thumbsCarousel.goTo(thumbsCurrIndex, true)
+      })
+    }
   }
+
 }
 </script>
 <style>
