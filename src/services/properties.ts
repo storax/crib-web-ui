@@ -9,8 +9,8 @@ export const propertiesService = {
       data: {
         limit: 100,
         order_by: [
-          ['price.amount', 1],
-          ['firstVisibleDate', -1]
+          ['firstVisibleDate', -1],
+          ['price.amount', 1]
         ]
       }
     }

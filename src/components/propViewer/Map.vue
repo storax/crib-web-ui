@@ -5,7 +5,7 @@
     v-for="item in properties"
     :lat-lng="[item.location.latitude, item.location.longitude]"
     :key="item.id"
-    :icon="item.markerIcon ? item.markerIcon : defaultIcon"
+    :icon="isCurrentProperty(item) ? selectedIcon : defaultIcon"
     v-on:click="selectMarker(item)"
     >
     <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
@@ -51,6 +51,7 @@ export default class Map extends Vue {
   selectedIcon = redIcon
 
   @propns.State('properties') properties
+  @propns.Getter('isCurrentProperty') isCurrentProperty
 
   $refs!: {
     map: LMap

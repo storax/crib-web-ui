@@ -2,13 +2,14 @@
   <v-container fluid fill-height pa-0>
     <v-layout column>
       <v-layout style="max-height: 100%">
-        <v-flex>
-          <Map v-on:propertyClicked="showProperty($event)"></Map>
+        <v-flex v-if="showMap" style="min-width: 60%">
+          <Map @propertyClicked="showProperty($event)"></Map>
         </v-flex>
-        <v-flex md4 class="scroll">
+        <v-flex class="scroll">
           <PropertyDetails
-            v-if="propToDisplay"
-            :propertyToView="propToDisplay"
+            ref="details"
+            v-if="currentProperty"
+            :propertyToView="currentProperty"
           ></PropertyDetails>
         </v-flex>
       </v-layout>
@@ -26,9 +27,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { State, Action, namespace } from 'vuex-class'
+
 import Map from './Map'
 import PropertyDetails from './Details'
-import { State, Action, namespace } from 'vuex-class'
+import eventHub from '../../events'
 
 const propns = namespace('properties')
 
@@ -37,22 +40,38 @@ const propns = namespace('properties')
   PropertyDetails
 }})
 export default class PropertyViewer extends Vue {
-  @propns.Action('getProperties') getProperties
-  @propns.State('gettingProperties') gettingProperties
-  @propns.State('properties') properties
+  @propns.Action getProperties
+  @propns.Action('setCurrentProperty') showProperty
+  @propns.Action toggleMap
+  @propns.State gettingProperties
+  @propns.State currentProperty
+  @propns.State properties
+  @propns.State showMap
 
-  propToDisplay = this.properties ? this.properties[0] : null
+  $refs!: {
+    details: PropertyDetails,
+  }
 
   get propertiesJSON () {
     return JSON.stringify(this.properties, undefined, 2)
   }
 
-  showProperty (prop) {
-    this.propToDisplay = prop
+  created () {
+    eventHub.$on('keyup', this.onKey)
   }
-  
+
   beforeMount () {
     this.getProperties()
+  }
+
+  beforeDestroy () {
+    eventHub.$off('keyup', this.onKey)
+  }
+
+  onKey (event) {
+    if (event.keyCode === 77) {
+      this.toggleMap()
+    }
   }
 }
 </script>

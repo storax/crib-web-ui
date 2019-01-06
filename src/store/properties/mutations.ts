@@ -11,5 +11,11 @@ export const mutations: MutationTree<PropertiesState> = {
   },
   propertiesError (state) {
     state.gettingProperties = false
+  },
+  setCurrentProperty (state, property: Property) {
+    state.currentProperty = property
+  },
+  setShowMap (state, show: boolean) {
+    state.showMap = show
   }
 }

@@ -1,13 +1,15 @@
 <template>
-  <v-card>
-    <v-card >
-      <Carousel :images="propertyImages"></Carousel>
-    </v-card>
-    <v-card >
-      <Carousel :images="floorplanImages"></Carousel>
-    </v-card>
+<v-layout justify-center align-center column>
+  <v-flex>
+    <Carousel :images="propertyImages" style="max-width: 1000px"></Carousel>
+  </v-flex>
+  <v-flex>
+    <Carousel :images="floorplanImages" style="max-width: 1000px"></Carousel>
+  </v-flex>
+  <v-flex>
     <div v-html="propertyToView.summary"></div>
-  </v-card>
+  </v-flex>
+</v-layout>
 </template>
 
 <script lang="ts">
@@ -26,11 +28,11 @@ export default class PropertyDetails extends Vue {
   @Prop(Property) propertyToView: Property
 
   get propertyImages () {
-     return this.propertyToView.propertyImages
+    return this.propertyToView.propertyImages
   }
 
   get floorplanImages () {
-     return this.propertyToView.floorplanImages
+    return this.propertyToView.floorplanImages
   }
 
 }
