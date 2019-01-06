@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
@@ -40,12 +40,14 @@ export default class Carousel extends Vue {
     swiperThumbs: swiper
   }
 
-  swiperOptionTop = {
-    loop: true;
-    loopedSlides: this.images.length,
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
+  get swiperOptionTop () {
+    return {
+      loop: true;
+      loopedSlides: this.images.length,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      }
     }
   }
   get swiperOptionThumbs () {
@@ -66,6 +68,13 @@ export default class Carousel extends Vue {
       swiperTop.controller.control = swiperThumbs
       swiperThumbs.controller.control = swiperTop
     })
+  }
+
+  @Watch('images', { immediate: true, deep: false })
+  onImagesChange(val: string[] oldval: string[]) {
+    if this.$refs.swiperTop {
+      this.$refs.swiperTop.swiper.slideToLoop(0, null, false)
+    }
   }
 }
 </script>
