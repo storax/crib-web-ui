@@ -16,6 +16,7 @@
       </v-img>
     </slick>
     <slick
+      v-if="images.length > 1"
       class="thumbsCarousel"
       style="max-height: 20%"
       ref="thumbsCarousel"
@@ -55,7 +56,7 @@ export default class Carousel extends Vue {
     return {
       slidesToShow: 1,
       arrows: false,
-      asNavFor: '.thumbsCarousel'
+      asNavFor: (this.images.length > 1) ? '.thumbsCarousel' : null
     }
   }
   get thumbsOptions () {
@@ -76,17 +77,18 @@ export default class Carousel extends Vue {
 
   @Watch('images', { immediate: true, deep: false })
   onImagesChange(val: string[] oldval: string[]) {
-    if this.$refs.mainCarousel {
-      const mainCurrIndex = this.$refs.mainCarousel.currentSlide()
-      const thumbsCurrIndex = this.$refs.thumbsCarousel.currentSlide()
-      this.$refs.mainCarousel.destroy()
-      this.$refs.thumbsCarousel.destroy()
-      this.$nextTick(() => {
-          this.$refs.mainCarousel.create()
-          this.$refs.thumbsCarousel.create()
-          this.$refs.mainCarousel.goTo(mainCurrIndex, true)
-          this.$refs.thumbsCarousel.goTo(thumbsCurrIndex, true)
-      })
+    const carousels = [this.$refs.mainCarousel, this.$refs.thumbsCarousel]
+    for (let carousel of carousels) {
+      if carousel {
+        const currIndex = carousel.currentSlide()
+        carousel.destroy()
+        this.$nextTick(() => {
+            if carousel {
+              carousel.create()
+              carousel.goTo(currIndex, true)
+            }
+        })
+      }
     }
   }
 

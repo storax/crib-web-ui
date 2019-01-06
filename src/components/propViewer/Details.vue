@@ -3,6 +3,9 @@
     <v-card >
       <Carousel :images="propertyImages"></Carousel>
     </v-card>
+    <v-card >
+      <Carousel :images="floorplanImages"></Carousel>
+    </v-card>
     <div v-html="propertyToView.summary"></div>
   </v-card>
 </template>
@@ -14,7 +17,7 @@ import { Property } from '../../store/properties/types'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 
-import Carousel from './carousel'
+import Carousel from './Carousel'
 
 @Component({ components: {
   Carousel
@@ -24,6 +27,10 @@ export default class PropertyDetails extends Vue {
 
   get propertyImages () {
      return this.propertyToView.propertyImages
+  }
+
+  get floorplanImages () {
+     return this.propertyToView.floorplanImages
   }
 
 }
