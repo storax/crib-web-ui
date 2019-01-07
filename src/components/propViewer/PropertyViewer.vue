@@ -71,6 +71,10 @@ export default class PropertyViewer extends Vue {
   onKey (event) {
     if (event.keyCode === 77) {
       this.toggleMap()
+    } else if (event.keyCode === 72) {
+      this.$refs.details.prevImage()
+    } else if (event.keyCode === 76) {
+      this.$refs.details.nextImage()
     }
   }
 }

@@ -8,7 +8,6 @@
       <v-img v-for="(image, index) in images"
              :key="index"
              :src="image"
-             :lazySrc="someImage"
              :aspect-ratio="656/437"
              max-height="100%"
              contain
@@ -24,8 +23,6 @@
       <v-img v-for="(image, index) in images"
              :key="index"
              :src="image"
-             :lazySrc="someImage"
-             alt="Loading"
              :aspect-ratio="656/437"
              max-height="100%"
              contain
@@ -56,23 +53,33 @@ export default class Carousel extends Vue {
     return {
       slidesToShow: 1,
       arrows: false,
+      infinite: true,
       asNavFor: (this.images.length > 1) ? '.thumbsCarousel' : null
     }
   }
   get thumbsOptions () {
     return {
       dots: true,
-      slidesToShow: 3,
+      slidesToShow: 4,
       slidesToScroll: 1,
       centerMode: true,
       focusOnSelect: true,
-      asNavFor: '.mainCarousel'
+      asNavFor: '.mainCarousel',
+      infinite: true
     }
   }
 
   $refs!: {
     mainCarousel: Slick,
     thumbsCarousel: Slick
+  }
+
+  next(): void {
+    this.$refs.mainCarousel.next()
+  }
+
+  prev(): void {
+    this.$refs.mainCarousel.prev()
   }
 
   @Watch('images', { immediate: true, deep: false })

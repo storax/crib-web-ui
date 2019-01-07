@@ -1,10 +1,10 @@
 <template>
-<v-layout column>
+<v-layout column justify-center align-center>
   <v-flex>
-    <Carousel :images="allImages" style="max-width: 1000px"></Carousel>
+    <Carousel ref="carousel" :images="allImages" style="width: 50em"></Carousel>
   </v-flex>
   <v-flex>
-    <div v-html="propertyToView.summary"></div>
+    <div v-html="propertyToView.summary" style="width: 50em"></div>
   </v-flex>
 </v-layout>
 </template>
@@ -24,12 +24,24 @@ import Carousel from './Carousel'
 export default class PropertyDetails extends Vue {
   @Prop(Property) propertyToView: Property
 
+  $refs!: {
+    carousel: Carousel
+  }
+
   get allImages () {
     return [ ...this.propertyToView.propertyImages, ...this.floorplanImages ]
   }
 
   get floorplanImages () {
     return this.propertyToView.floorplanImages
+  }
+
+  nextImage (): void {
+    this.$refs.carousel.next()
+  }
+
+  prevImage (): void {
+    this.$refs.carousel.prev()
   }
 
 }
