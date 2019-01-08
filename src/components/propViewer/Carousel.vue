@@ -101,6 +101,7 @@ export default class Carousel extends Vue {
 
   get mainOptions () {
     return {
+      fade: true,
       slidesToShow: 1,
       arrows: false,
       infinite: true,
@@ -110,6 +111,7 @@ export default class Carousel extends Vue {
 
   get fsMainOptions () {
     return {
+      fade: true,
       slidesToShow: 1,
       arrows: false,
       infinite: true,
