@@ -75,6 +75,8 @@ export default class PropertyViewer extends Vue {
       this.$refs.details.prevImage()
     } else if (event.keyCode === 76) {
       this.$refs.details.nextImage()
+    } else if (event.keyCode === 73) {
+      this.$refs.details.toggleFullscreenImages()
     }
   }
 }

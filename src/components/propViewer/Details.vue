@@ -44,5 +44,9 @@ export default class PropertyDetails extends Vue {
     this.$refs.carousel.prev()
   }
 
+  toggleFullscreenImages (): void {
+    this.$refs.carousel.toggleFullscreen()
+  }
+
 }
 </script>
