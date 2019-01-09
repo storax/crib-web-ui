@@ -29,7 +29,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { State, Action, namespace } from 'vuex-class'
 
-import Map from './Map'
+import Map from '../map/Map'
 import PropertyDetails from './Details'
 import eventHub from '../../events'
 

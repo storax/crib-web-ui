@@ -26,6 +26,7 @@
     "vue-template-compiler": "^2.5.21"
   },
   "dependencies": {
+    "@mapbox/polyline": "^1.0.0",
     "axios": "^0.18.0",
     "jquery": "^3.3.1",
     "leaflet": "^1.4.0",

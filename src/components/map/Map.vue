@@ -1,6 +1,7 @@
 <template>
 <l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0">
   <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+  <Route :data="directions"></Route>
   <l-marker
     v-for="item in properties"
     :lat-lng="[item.location.latitude, item.location.longitude]"
@@ -15,9 +16,12 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from 'vue-property-decorator'
-import { LMap, LTileLayer, LMarker, LPopup, LTooltip } from 'vue2-leaflet'
-
+import { LMap, LTileLayer, LMarker, LPopup, LTooltip, LPolyline } from 'vue2-leaflet'
 import { State, Action, namespace } from 'vuex-class'
+import * as polyline from '@mapbox/polyline'
+
+import Route from './Route'
+import directions from './directions'
 
 const propns = namespace('properties')
 
@@ -36,7 +40,8 @@ const redIcon = new L.Icon({
   LTileLayer,
   LMarker,
   LPopup,
-  LTooltip
+  LTooltip,
+  Route
 }})
 export default class Map extends Vue {
   url: string = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png' +
@@ -60,6 +65,8 @@ export default class Map extends Vue {
   onResize() {
     this.$refs.map.mapObject.invalidateSize()
   }
+
+  directions = directions
 
   @Emit('propertyClicked')
   selectMarker(property) {
