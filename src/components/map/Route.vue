@@ -1,5 +1,5 @@
-<template v-if="ok">
-<l-polyline v-if="!detailed"
+<template>
+<l-polyline v-if="route && !detailed"
   :lat-lngs="overview_polyline"
   :fill="false"
   :weight="weight">
@@ -8,7 +8,7 @@
     <b>{{distance}}</b>
   </l-tooltip>
 </l-polyline>
-<div v-else>
+<div v-else-if="route">
 <l-polyline v-for="(step, index) in steps"
   :dashArray="stepDash(step)"
   :key="'pl' + index"
@@ -17,7 +17,14 @@
   :fill="false"
   :weight="weight">
   <l-tooltip :options="tooltipOptDetails" class="crib-route-tooltip">
-    <span v-html="stepHTML(step)"></span>
+      <table>
+        <tr>
+          <th><b>Total: </b></th>
+          <th><b>{{duration}}</b></th>
+          <th><b>{{distance}}</b></th>
+        </tr>
+      </table>
+      <span v-html="stepHTML(step)"></span>
   </l-tooltip>
 </l-polyline>
 <l-circle-marker
@@ -46,7 +53,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import { LCircleMarker, LTooltip, LPolyline } from 'vue2-leaflet'
 import * as polyline from '@mapbox/polyline'
 
-import { DirectionsData, RouteData, Leg, Step, TravelMode, Waypoint } from './types'
+import { RouteData, Leg, Step, TravelMode, Waypoint } from '../../store/properties/types'
 
 @Component({components: {
   LPolyline,
@@ -54,8 +61,8 @@ import { DirectionsData, RouteData, Leg, Step, TravelMode, Waypoint } from './ty
   LCircleMarker
 }})
 export default class Route extends Vue {
-  @Prop() data: DirectionsData
-  detailed = false
+  @Prop() routes: RouteData[]
+  detailed = true
   weight = 6
   tooltipOpt = {
     permanent: true
@@ -64,16 +71,16 @@ export default class Route extends Vue {
     sticky: true
   }
 
-  get route (): RouteData {
-    return this.data.routes[0]
+  get route (): RouteData | null {
+    if (this.routes && this.routes.length > 0) {
+      return this.routes[0]
+    } else {
+      return null
+    }
   }
 
-  get leg (): Leg {
-    return this.route.legs[0]
-  }
-
-  get ok (): boolean {
-    return this.data.status === 'OK'
+  get leg (): Leg | null {
+    return this.route ? this.route.legs[0] : null
   }
 
   decodePoly (encoded: string): Waypoint[] {
@@ -141,6 +148,7 @@ export default class Route extends Vue {
   get distance (): string {
     return this.leg.distance.text
   }
+
 }
 </script>
 <style>

@@ -1,7 +1,7 @@
 <template>
 <l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0">
   <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-  <Route :data="directions"></Route>
+  <Route :routes="routes"></Route>
   <l-marker
     v-for="item in properties"
     :lat-lng="[item.location.latitude, item.location.longitude]"
@@ -20,8 +20,8 @@ import { LMap, LTileLayer, LMarker, LPopup, LTooltip, LPolyline } from 'vue2-lea
 import { State, Action, namespace } from 'vuex-class'
 import * as polyline from '@mapbox/polyline'
 
+import { Property, RouteData } from '../../store/properties/types'
 import Route from './Route'
-import directions from './directions'
 
 const propns = namespace('properties')
 
@@ -55,7 +55,9 @@ export default class Map extends Vue {
   defaultIcon = new L.Icon.Default()
   selectedIcon = redIcon
 
+
   @propns.State('properties') properties
+  @propns.State('currentProperty') currentProperty
   @propns.Getter('isCurrentProperty') isCurrentProperty
 
   $refs!: {
@@ -66,15 +68,15 @@ export default class Map extends Vue {
     this.$refs.map.mapObject.invalidateSize()
   }
 
-  directions = directions
+  get routes (): RouteData[] {
+    if (this.currentProperty && this.currentProperty.toWork) {
+      return this.currentProperty.toWork
+    }
+    return []
+  }
 
   @Emit('propertyClicked')
   selectMarker(property) {
-  	if (this.currentProperty) {
-      Vue.delete(this.currentProperty, 'markerIcon')
-    }
-  	this.currentProperty = property
-    Vue.set(this.currentProperty, 'markerIcon', this.selectedIcon)
     return property
   }
 }

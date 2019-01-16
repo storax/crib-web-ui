@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex'
-import { PropertiesState, Property } from './types'
+import { PropertiesState, Property, RouteData } from './types'
 import { RootState } from '../types'
 import { propertiesService } from '../../services'
 
@@ -17,6 +17,16 @@ export const actions: ActionTree<PropertiesState, RootState> = {
         },
         error => {
           commit('propertiesError', error)
+          dispatch('alert/error', error.message, { root: true })
+        })
+  },
+  getToWork ({ dispatch, commit }, property: Property) {
+    propertiesService.toWork(property)
+      .then(
+        (routedata: RouteData) => {
+          commit('setRoute', { property: property, routedata: routedata })
+        },
+        error => {
           dispatch('alert/error', error.message, { root: true })
         })
   },

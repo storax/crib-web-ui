@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { MutationTree } from 'vuex'
 import { PropertiesState, Property } from './types'
 
@@ -17,5 +18,8 @@ export const mutations: MutationTree<PropertiesState> = {
   },
   setShowMap (state, show: boolean) {
     state.showMap = show
+  },
+  setRoute (state, { property, routedata }) {
+    Vue.set(property, 'toWork', routedata)
   }
 }

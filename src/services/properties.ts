@@ -1,5 +1,6 @@
 import { cribReq } from '../utils'
 import { userService } from './user'
+import { Property } from '../store/properties/types';
 
 export const propertiesService = {
   find: () => {
@@ -12,6 +13,19 @@ export const propertiesService = {
           ['firstVisibleDate', -1],
           ['price.amount', 1]
         ]
+      }
+    }
+    return cribReq(config)
+      .then(response => { return response.data })
+      .catch(handle401)
+  },
+  toWork: (property: Property) => {
+    const config = {
+      method: 'get',
+      url: '/directions/to_work',
+      params: {
+        prop_id: property.id,
+        mode: 'transit'
       }
     }
     return cribReq(config)
