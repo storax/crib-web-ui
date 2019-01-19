@@ -5,8 +5,21 @@ export interface PropertiesState {
   showMap: boolean,
 }
 
+export interface Price {
+  amount: number
+  frequency: string
+  currencyCode: string
+}
+
+export interface Location {
+  latitude: number,
+  longitude: number
+}
+
 export interface Property {
   id: string,
+  price: Price,
+  location: Location,
   toWork: RouteData[]
 }
 

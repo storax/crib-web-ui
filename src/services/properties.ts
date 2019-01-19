@@ -8,7 +8,7 @@ export const propertiesService = {
       method: 'post',
       url: '/properties/find',
       data: {
-        limit: 100,
+        limit: 1000,
         order_by: [
           ['firstVisibleDate', -1],
           ['price.amount', 1]

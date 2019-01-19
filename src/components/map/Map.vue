@@ -11,17 +11,19 @@
     >
     <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
   </l-marker>
+  <PropQuadTree :props="getProps"></PropQuadTree>
 </l-map>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Emit } from 'vue-property-decorator'
+import { Component, Vue, Emit, Watch } from 'vue-property-decorator'
 import { LMap, LTileLayer, LMarker, LPopup, LTooltip, LPolyline } from 'vue2-leaflet'
 import { State, Action, namespace } from 'vuex-class'
 import * as polyline from '@mapbox/polyline'
 
 import { Property, RouteData } from '../../store/properties/types'
 import Route from './Route'
+import PropQuadTree from './Quadtree'
 
 const propns = namespace('properties')
 
@@ -41,7 +43,8 @@ const redIcon = new L.Icon({
   LMarker,
   LPopup,
   LTooltip,
-  Route
+  Route,
+  PropQuadTree
 }})
 export default class Map extends Vue {
   url: string = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png' +
@@ -54,7 +57,6 @@ export default class Map extends Vue {
   center: [number, number] = [51.505, -0.09]
   defaultIcon = new L.Icon.Default()
   selectedIcon = redIcon
-
 
   @propns.State('properties') properties
   @propns.State('currentProperty') currentProperty
@@ -78,6 +80,10 @@ export default class Map extends Vue {
   @Emit('propertyClicked')
   selectMarker(property) {
     return property
+  }
+
+  get getProps(): Property[] {
+    return this.properties
   }
 }
 </script>
