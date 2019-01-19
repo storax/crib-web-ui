@@ -1,25 +1,28 @@
+import tinygradient from 'tinygradient'
+import * as moment from 'moment'
+import 'moment-duration-format'
+
 import { LatLngBounds, LatLng } from './latlng'
 import { Property } from '../../store/properties/types'
 
-export interface Division {
+export interface Division<T> {
   bounds: [[number, number], [number, number]]
-  data: any
+  data: T
 }
 
 type StatsAux = number | StatsAuxArray
 interface StatsAuxArray extends Array<StatsAux> {}
 
-export class QuadTree<T> {
-  maxObjectsPerLevel: number
-  maxLevels: number
-  depth: number
-  elements: T[]
-  nodes: QuadTree<T>[]
-  bounds: LatLngBounds
-  getElementBounds: (e: T) => LatLngBounds
+abstract class QuadTree<T, DT> {
+  private maxObjectsPerLevel: number
+  private maxLevels: number
+  private depth: number
+  private elements: T[]
+  private nodes: QuadTree<T, DT>[]
+  private bounds: LatLngBounds
+  protected abstract getElementBounds (e: T): LatLngBounds
 
-  constructor (getBounds: (e: T) => LatLngBounds, maxObjectsPerLevel: number = 10, maxLevels: number = 8 , depthLevel: number = 0) {
-    this.getElementBounds = getBounds
+  constructor (maxObjectsPerLevel: number = 10, maxLevels: number = 8 , depthLevel: number = 0) {
     this.maxObjectsPerLevel = maxObjectsPerLevel
     this.maxLevels = maxLevels
     this.depth = depthLevel
@@ -28,7 +31,7 @@ export class QuadTree<T> {
     this.bounds = new LatLngBounds(new LatLng(0, 0), new LatLng(0, 0))
   }
 
-  add (elem: T): QuadTree<T> {
+  add (elem: T): QuadTree<T, DT> {
     const elemBounds = this.getElementBounds(elem)
 
     if (0 === this.depth && 0 === this.elements.length && 0 === this.nodes.length) {
@@ -65,7 +68,7 @@ export class QuadTree<T> {
 
   }
 
-  updateChildNodesBounds (): QuadTree<T> {
+  private updateChildNodesBounds (): QuadTree<T, DT> {
     if (0 !== this.nodes.length) {
       const nwChild: LatLng = this.bounds.northWest
       const seChild: LatLng = this.bounds.southEast
@@ -99,7 +102,7 @@ export class QuadTree<T> {
     return this
   }
 
-  updateChildNodesElements (): QuadTree<T> {
+  private updateChildNodesElements (): QuadTree<T, DT> {
     if (0 !== this.nodes.length) {
       const elements = this.getColliders(this.bounds)
       if (this.maxObjectsPerLevel < elements.length &&
@@ -122,11 +125,10 @@ export class QuadTree<T> {
     return this
   }
 
-  splitNode (): QuadTree<T> {
+  private splitNode (): QuadTree<T, DT> {
     this.nodes = []
     for (let i of [0, 1, 2, 3]) {
-      this.nodes[i] = new QuadTree(
-        this.getElementBounds,
+      this.nodes[i] = new (<any>this.constructor)(
         this.maxObjectsPerLevel,
         this.maxLevels,
         this.depth + 1
@@ -136,7 +138,7 @@ export class QuadTree<T> {
     return this
   }
 
-  getQuadrants (bounds: LatLngBounds): number[] {
+  private getQuadrants (bounds: LatLngBounds): number[] {
     const indexes: number[] = []
     this.nodes.forEach((node, index) => {
       if (node.bounds.intersects(bounds)) {
@@ -146,7 +148,7 @@ export class QuadTree<T> {
     return indexes
   }
 
-  getPossibleColliders (bounds: LatLngBounds): T[] {
+  private getPossibleColliders (bounds: LatLngBounds): T[] {
     let colliders: T[] = []
     const intersects = this.bounds.intersects(bounds)
     if (intersects) {
@@ -158,7 +160,7 @@ export class QuadTree<T> {
     return colliders
   }
 
-  getColliders (bounds: LatLngBounds): T[] {
+  private getColliders (bounds: LatLngBounds): T[] {
     const realColliders: T[] = []
     const colliders = this.getPossibleColliders(bounds)
     for (let elem of colliders) {
@@ -170,7 +172,7 @@ export class QuadTree<T> {
     return realColliders
   }
 
-  intersects (elem: T, bounds: LatLngBounds): boolean {
+  private intersects (elem: T, bounds: LatLngBounds): boolean {
     const elemBounds = this.getElementBounds(elem)
     return bounds.intersects(elemBounds)
   }
@@ -187,7 +189,7 @@ export class QuadTree<T> {
     return this._getQuadtreeStatsAux()
   }
 
-  _getQuadtreeStatsAux (): StatsAux {
+  private _getQuadtreeStatsAux (): StatsAux {
     const children = []
     if (this.nodes.length) {
       for (let node of this.nodes) {
@@ -200,29 +202,116 @@ export class QuadTree<T> {
     return children
   }
 
-  getDivisions (reducer: (elems: T[]) => any): Division[] {
-    let divisions: Division[] = []
+  getDivisions (reducer: (elems: T[]) => any | null): Division<DT>[] {
+    let divisions: Division<DT>[] = []
     if (this.nodes.length) {
       for (let node of this.nodes) {
         divisions = divisions.concat(node.getDivisions(reducer))
       }
-    } else {
+    } else if (this.elements.length) {
       const nw = this.bounds.northWest
       const se = this.bounds.southEast
-      const div: Division = {
-        bounds: [[nw.lat, nw.lng], [se.lat, se.lng]],
-        data: reducer(this.elements)
+      const data = reducer(this.elements)
+      if (data) {
+        const div: Division<DT> = {
+          bounds: [[nw.lat, nw.lng], [se.lat, se.lng]],
+          data: data
+        }
+        divisions.push(div)
       }
-      divisions.push(div)
     }
     return divisions
   }
 }
 
-export function propertyQuadTree (maxObjectsPerLevel: number = 10, maxLevels: number = 8): QuadTree<Property> {
-  function getBounds (elem: Property): LatLngBounds {
-    let ll = new LatLng(elem.location.latitude, elem.location.longitude)
+interface DivisionData {
+  color: string
+  average: number,
+  text: string
+}
+
+export class PropertyQuadTree extends QuadTree<Property, DivisionData> {
+  private maxPrice: number
+  private minPrice: number
+  private maxDurationToWork: number
+  private minDurationToWork: number
+  gradient = tinygradient(
+    '#3FFBE0',
+    '#40D1E0',
+    '#64A5CA',
+    '#777BA4',
+    '#755474',
+    '#603546',
+  )
+
+  constructor (maxObjectsPerLevel: number = 10, maxLevels: number = 8, depthLevel: number = 0) {
+    super(maxObjectsPerLevel, maxLevels, depthLevel)
+    this.maxPrice = 0
+    this.minPrice = Number.MAX_SAFE_INTEGER
+    this.maxDurationToWork = 0
+    this.minDurationToWork = Number.MAX_SAFE_INTEGER
+  }
+
+  addProperty(prop: Property): void {
+    const amount = prop.price.amount
+    this.maxPrice = Math.max(this.maxPrice, amount)
+    this.minPrice = Math.min(this.minPrice, amount)
+    if (prop.toWork.length) {
+      const duration = prop.toWork[0].legs[0].duration.value
+      this.maxDurationToWork = Math.max(this.maxDurationToWork, duration)
+      this.minDurationToWork = Math.min(this.minDurationToWork, duration)
+    }
+    this.add(prop)
+  }
+
+  protected getElementBounds (prop: Property): LatLngBounds {
+    let ll = new LatLng(prop.location.latitude, prop.location.longitude)
     return new LatLngBounds(ll, ll)
   }
-  return new QuadTree<Property>(getBounds, maxObjectsPerLevel, maxLevels)
+
+  getAveragePrices (): Division<DivisionData>[] {
+    return this.getDivisions(this.priceReducer)
+  }
+
+  getAverageDurToWork (): Division<DivisionData>[] {
+    return this.getDivisions(this.durToWorkReducer)
+  }
+
+  private get priceReducer (): (a: Property[]) => DivisionData {
+    const n = normalize(this.minDurationToWork, this.maxDurationToWork)
+    return (properties: Property[]) => {
+      const sum = properties.reduce((total, prop) => total + prop.price.amount, 0)
+      const avg = sum / properties.length
+      return {
+        color: this.gradient.rgbAt(n(avg)).toHexString(),
+        average: avg,
+        text: `£${avg}`
+      }
+    }
+  }
+
+  private get durToWorkReducer (): (a: Property[]) => DivisionData | null {
+    const n = normalize(this.minDurationToWork, this.maxDurationToWork)
+    return (properties: Property[]) => {
+      const filtered = properties.filter((p) => p.toWork.length)
+      if (filtered.length) {
+        const sum = filtered.reduce((total, prop) => total + prop.toWork[0].legs[0].duration.value, 0)
+        const avg = sum / filtered.length
+        return {
+          color: this.gradient.rgbAt(n(avg)).toHexString(),
+          average: avg,
+          text: moment.duration(avg, 'seconds').format('m [min]')
+        }
+      } else {
+        return null
+      }
+    }
+  }
+}
+
+function normalize (min: number, max: number): (v: number) => number {
+  const delta = max - min
+  return function (val: number): number {
+    return (val - min) / delta
+  }
 }

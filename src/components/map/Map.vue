@@ -1,43 +1,50 @@
 <template>
 <l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0">
-  <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-  <Route :routes="routes"></Route>
-  <l-marker
-    v-for="item in properties"
-    :lat-lng="[item.location.latitude, item.location.longitude]"
-    :key="item.id"
-    :icon="isCurrentProperty(item) ? selectedIcon : defaultIcon"
-    v-on:click="selectMarker(item)"
-    >
-    <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
-  </l-marker>
+  <l-control-layers position="topright" :hideSingleBase="true"></l-control-layers>
+  <l-tile-layer :url="url" :attribution="attribution" layerType="base" name="Map"></l-tile-layer>
   <PropQuadTree :props="getProps"></PropQuadTree>
+  <l-layer-group layerType="overlay" name="Routes">
+    <Route :routes="routes"></Route>
+  </l-layer-group>
+  <l-layer-group layerType="overlay" name="Properties">
+    <l-marker
+      v-for="item in properties"
+      :lat-lng="[item.location.latitude, item.location.longitude]"
+      :key="item.id"
+      :icon="propIcon(item)"
+      v-on:click="selectMarker(item)">
+      <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
+    </l-marker>
+  </l-layer-group>
 </l-map>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Emit, Watch } from 'vue-property-decorator'
-import { LMap, LTileLayer, LMarker, LPopup, LTooltip, LPolyline } from 'vue2-leaflet'
+  import { Component, Vue, Emit, Watch } from 'vue-property-decorator'
+import {
+  LLayerGroup,
+  LControlLayers,
+  LMap,
+  LTileLayer,
+  LMarker,
+  LPopup,
+  LTooltip,
+  LPolyline
+} from 'vue2-leaflet'
+
 import { State, Action, namespace } from 'vuex-class'
 import * as polyline from '@mapbox/polyline'
 
 import { Property, RouteData } from '../../store/properties/types'
 import Route from './Route'
 import PropQuadTree from './Quadtree'
+import { redIcon, greenIcon } from './icons'
 
 const propns = namespace('properties')
 
-const redIcon = new L.Icon({
-    iconRetinaUrl: require('../../assets/marker-icon-2x-red.png'),
-    iconUrl: require('../../assets/marker-icon-red.png'),
-    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  })
-
 @Component({components: {
+  LLayerGroup,
+  LControlLayers,
   LMap,
   LTileLayer,
   LMarker,
@@ -56,6 +63,7 @@ export default class Map extends Vue {
   zoom: number = 12,
   center: [number, number] = [51.505, -0.09]
   defaultIcon = new L.Icon.Default()
+  fetchedIcon = greenIcon
   selectedIcon = redIcon
 
   @propns.State('properties') properties
@@ -66,8 +74,18 @@ export default class Map extends Vue {
     map: LMap
   }
 
-  onResize() {
+  onResize () {
     this.$refs.map.mapObject.invalidateSize()
+  }
+
+  propIcon (prop: Property) {
+    if this.isCurrentProperty(prop) {
+      return this.selectedIcon
+    } else if (prop.toWork.length) {
+      return this.fetchedIcon
+    } else {
+      return this.defaultIcon
+    }
   }
 
   get routes (): RouteData[] {
@@ -78,11 +96,11 @@ export default class Map extends Vue {
   }
 
   @Emit('propertyClicked')
-  selectMarker(property) {
+  selectMarker (property) {
     return property
   }
 
-  get getProps(): Property[] {
+  get getProps (): Property[] {
     return this.properties
   }
 }

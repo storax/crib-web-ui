@@ -27,9 +27,12 @@
   },
   "dependencies": {
     "@mapbox/polyline": "^1.0.0",
+    "@types/moment-duration-format": "^2.2.2",
     "axios": "^0.18.0",
     "jquery": "^3.3.1",
     "leaflet": "^1.4.0",
+    "moment": "^2.23.0",
+    "moment-duration-format": "^2.2.2",
     "slick": "^1.12.2",
     "swiper": "^4.4.6",
     "tinygradient": "^1.0.0",
