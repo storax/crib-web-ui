@@ -9,7 +9,8 @@
     "clean": "rimraf .cache/ && rimraf dist/ && rimraf build/",
     "test:unit": "jest --no-cache",
     "test:coverage": "jest --no-cache --coverage",
-    "predeploy": "npm run build"
+    "predeploy": "npm run build",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "author": "David Zuber",
   "license": "GPL-3.0-or-later",
@@ -17,12 +18,14 @@
     "@vue/component-compiler-utils": "^2.5.0",
     "autoprefixer": "^9.4.5",
     "cross-env": "^5.2.0",
+    "jest": "^23.6.0",
     "node-sass": "^4.11.0",
     "parcel-bundler": "^1.11.0",
     "rimraf": "^2.6.3",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
     "typescript": "^3.2.2",
+    "vue-jest": "^3.0.2",
     "vue-template-compiler": "^2.5.22"
   },
   "dependencies": {

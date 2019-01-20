@@ -128,7 +128,7 @@ abstract class QuadTree<T, DT> {
   private splitNode (): QuadTree<T, DT> {
     this.nodes = []
     for (let i of [0, 1, 2, 3]) {
-      this.nodes[i] = new (<any>this.constructor)(
+      this.nodes[i] = new (this.constructor as any)(
         this.maxObjectsPerLevel,
         this.maxLevels,
         this.depth + 1
@@ -241,7 +241,7 @@ export class PropertyQuadTree extends QuadTree<Property, DivisionData> {
     '#64A5CA',
     '#777BA4',
     '#755474',
-    '#603546',
+    '#603546'
   )
 
   constructor (maxObjectsPerLevel: number = 10, maxLevels: number = 8, depthLevel: number = 0) {
@@ -252,7 +252,7 @@ export class PropertyQuadTree extends QuadTree<Property, DivisionData> {
     this.minDurationToWork = Number.MAX_SAFE_INTEGER
   }
 
-  addProperty(prop: Property): void {
+  addProperty (prop: Property): void {
     const amount = prop.price.amount
     this.maxPrice = Math.max(this.maxPrice, amount)
     this.minPrice = Math.min(this.minPrice, amount)

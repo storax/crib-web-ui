@@ -1,6 +1,6 @@
 import { cribReq } from '../utils'
 import { userService } from './user'
-import { Property } from '../store/properties/types';
+import { Property } from '../store/properties/types'
 
 export const propertiesService = {
   find: () => {
