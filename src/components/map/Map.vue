@@ -1,10 +1,12 @@
 <template>
-<l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0">
+<l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0" @update:bounds="boundsUpdated">
   <l-control-layers position="topright" :hideSingleBase="true"></l-control-layers>
   <l-tile-layer :url="url" :attribution="attribution" layerType="base" name="Map"></l-tile-layer>
-  <PropQuadTree :props="getProps"></PropQuadTree>
+  <!-- <PropQuadTree :props="getProps"></PropQuadTree> -->
+  <!-- <DurationsQuadTree></DurationsQuadTree> -->
+  <DurationsField></DurationsField>
   <l-layer-group layerType="overlay" name="Routes">
-    <Route :routes="routes"></Route>
+    <Route :route="route"></Route>
   </l-layer-group>
   <l-layer-group layerType="overlay" name="Properties">
     <l-marker
@@ -37,10 +39,13 @@ import * as polyline from '@mapbox/polyline'
 
 import { Property, RouteData } from '../../store/properties/types'
 import Route from './Route'
-import PropQuadTree from './Quadtree'
+import PropQuadTree from './PropQuadTree'
+import DurationsQuadTree from './DurationsQuadTree'
+import DurationsField from './DurationsField'
 import { redIcon, greenIcon } from './icons'
 
 const propns = namespace('properties')
+const dirns = namespace('directions')
 
 @Component({components: {
   LLayerGroup,
@@ -51,7 +56,9 @@ const propns = namespace('properties')
   LPopup,
   LTooltip,
   Route,
-  PropQuadTree
+  PropQuadTree,
+  DurationsQuadTree,
+  DurationsField
 }})
 export default class Map extends Vue {
   url: string = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png' +
@@ -66,9 +73,11 @@ export default class Map extends Vue {
   fetchedIcon = greenIcon
   selectedIcon = redIcon
 
-  @propns.State('properties') properties
-  @propns.State('currentProperty') currentProperty
-  @propns.Getter('isCurrentProperty') isCurrentProperty
+  @propns.State properties
+  @propns.State currentProperty
+  @propns.Getter isCurrentProperty
+  @dirns.State mapRaster
+  @dirns.Action getMapRaster
 
   $refs!: {
     map: LMap
@@ -81,18 +90,15 @@ export default class Map extends Vue {
   propIcon (prop: Property) {
     if this.isCurrentProperty(prop) {
       return this.selectedIcon
-    } else if (prop.toWork.length) {
+    } else if (prop.toWork.steps) {
       return this.fetchedIcon
     } else {
       return this.defaultIcon
     }
   }
 
-  get routes (): RouteData[] {
-    if (this.currentProperty && this.currentProperty.toWork) {
-      return this.currentProperty.toWork
-    }
-    return []
+  get route (): RouteData | null {
+    return this.currentProperty ? this.currentProperty.toWork : null
   }
 
   @Emit('propertyClicked')
@@ -102,6 +108,9 @@ export default class Map extends Vue {
 
   get getProps (): Property[] {
     return this.properties
+  }
+  boundsUpdated (bounds) {
+    console.log(bounds)
   }
 }
 </script>

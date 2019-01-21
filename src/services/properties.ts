@@ -31,7 +31,26 @@ export const propertiesService = {
     return cribReq(config)
       .then(response => { return response.data })
       .catch(handle401)
+  },
+  rasterMap: () => {
+    const config = {
+      method: 'get',
+      url: '/directions/raster_map'
+    }
+    return cribReq(config)
+      .then(response => { return response.data })
+      .catch(handle401)
+  },
+  toWorkDurations: () => {
+    const config = {
+      method: 'get',
+      url: '/directions/to_work_durations'
+    }
+    return cribReq(config)
+      .then(response => { return response.data })
+      .catch(handle401)
   }
+
 }
 
 function handle401 (error: any) {

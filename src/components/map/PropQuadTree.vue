@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
 import { LRectangle, LLayerGroup, LTooltip } from 'vue2-leaflet'
 import { PropertyQuadTree, Division, DivistionData } from './quadtree'
 import { Property } from '../../store/properties/types'

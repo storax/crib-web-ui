@@ -53,7 +53,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import { LCircleMarker, LTooltip, LPolyline } from 'vue2-leaflet'
 import * as polyline from '@mapbox/polyline'
 
-import { RouteData, Leg, Step, TravelMode, Waypoint } from '../../store/properties/types'
+import { RouteData, Step, TravelMode, Waypoint } from '../../store/properties/types'
 
 @Component({components: {
   LPolyline,
@@ -61,7 +61,7 @@ import { RouteData, Leg, Step, TravelMode, Waypoint } from '../../store/properti
   LCircleMarker
 }})
 export default class Route extends Vue {
-  @Prop() routes: RouteData[]
+  @Prop() route: RouteData
   detailed = true
   weight = 6
   tooltipOpt = {
@@ -69,18 +69,6 @@ export default class Route extends Vue {
   }
   tooltipOptDetails = {
     sticky: true
-  }
-
-  get route (): RouteData | null {
-    if (this.routes && this.routes.length > 0) {
-      return this.routes[0]
-    } else {
-      return null
-    }
-  }
-
-  get leg (): Leg | null {
-    return this.route ? this.route.legs[0] : null
   }
 
   decodePoly (encoded: string): Waypoint[] {
@@ -132,7 +120,7 @@ export default class Route extends Vue {
   }
 
   get steps (): Step[] {
-    return this.leg.steps
+    return this.route.steps
   }
 
   get overview_polyline (): Waypoint[] {
@@ -142,11 +130,11 @@ export default class Route extends Vue {
   }
 
   get duration (): string {
-    return this.leg.duration.text
+    return this.route.duration.text
   }
 
   get distance (): string {
-    return this.leg.distance.text
+    return this.route.distance.text
   }
 
 }

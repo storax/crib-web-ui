@@ -20,7 +20,7 @@ export interface Property {
   id: string,
   price: Price,
   location: Location,
-  toWork: RouteData[]
+  toWork: RouteData
 }
 
 export interface LatLng {
@@ -73,18 +73,14 @@ export interface Step {
   transit_details?: TransitDetails
 }
 
-export interface Leg {
-  steps: Step[]
-  duration: Duration
-}
-
 export interface Polyline {
   points: string
 }
 
 export interface RouteData {
   overview_polyline: Polyline
-  legs: Leg[]
+  steps: Step[]
+  duration: Duration
 }
 
 export type Waypoint = [number, number]

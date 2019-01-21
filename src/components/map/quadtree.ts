@@ -4,6 +4,7 @@ import 'moment-duration-format'
 
 import { LatLngBounds, LatLng } from './latlng'
 import { Property } from '../../store/properties/types'
+import { ToWorkDuration } from '../../store/directions/types';
 
 export interface Division<T> {
   bounds: [[number, number], [number, number]]
@@ -224,7 +225,7 @@ abstract class QuadTree<T, DT> {
   }
 }
 
-interface DivisionData {
+export interface DivisionData {
   color: string
   average: number,
   text: string
@@ -256,8 +257,8 @@ export class PropertyQuadTree extends QuadTree<Property, DivisionData> {
     const amount = prop.price.amount
     this.maxPrice = Math.max(this.maxPrice, amount)
     this.minPrice = Math.min(this.minPrice, amount)
-    if (prop.toWork.length) {
-      const duration = prop.toWork[0].legs[0].duration.value
+    if (prop.toWork.overview_polyline) {
+      const duration = prop.toWork.duration.value
       this.maxDurationToWork = Math.max(this.maxDurationToWork, duration)
       this.minDurationToWork = Math.min(this.minDurationToWork, duration)
     }
@@ -293,9 +294,9 @@ export class PropertyQuadTree extends QuadTree<Property, DivisionData> {
   private get durToWorkReducer (): (a: Property[]) => DivisionData | null {
     const n = normalize(this.minDurationToWork, this.maxDurationToWork)
     return (properties: Property[]) => {
-      const filtered = properties.filter((p) => p.toWork.length)
+      const filtered = properties.filter((p) => p.toWork.overview_polyline)
       if (filtered.length) {
-        const sum = filtered.reduce((total, prop) => total + prop.toWork[0].legs[0].duration.value, 0)
+        const sum = filtered.reduce((total, prop) => total + prop.toWork.duration.value, 0)
         const avg = sum / filtered.length
         return {
           color: this.gradient.rgbAt(n(avg)).toHexString(),
@@ -309,7 +310,56 @@ export class PropertyQuadTree extends QuadTree<Property, DivisionData> {
   }
 }
 
-function normalize (min: number, max: number): (v: number) => number {
+
+export class ToWorkDurationsQuadTree extends QuadTree<ToWorkDuration, DivisionData> {
+  private maxDurationToWork: number
+  private minDurationToWork: number
+  gradient = tinygradient(
+    '#3FFBE0',
+    '#40D1E0',
+    '#64A5CA',
+    '#777BA4',
+    '#755474',
+    '#603546'
+  )
+
+  constructor (maxObjectsPerLevel: number = 10, maxLevels: number = 8, depthLevel: number = 0) {
+    super(maxObjectsPerLevel, maxLevels, depthLevel)
+    this.maxDurationToWork = 0
+    this.minDurationToWork = Number.MAX_SAFE_INTEGER
+  }
+
+  addToWorkDuration (toWorkDuration: ToWorkDuration): void {
+    const duration = toWorkDuration.duration.value
+    this.maxDurationToWork = Math.max(this.maxDurationToWork, duration)
+    this.minDurationToWork = Math.min(this.minDurationToWork, duration)
+    this.add(toWorkDuration)
+  }
+
+  protected getElementBounds (toWorkDuration: ToWorkDuration): LatLngBounds {
+    let ll = new LatLng(toWorkDuration.location.latitude, toWorkDuration.location.longitude)
+    return new LatLngBounds(ll, ll)
+  }
+
+  getAverageDurToWork (): Division<DivisionData>[] {
+    return this.getDivisions(this.durToWorkReducer)
+  }
+
+  private get durToWorkReducer (): (a: ToWorkDuration[]) => DivisionData | null {
+    const n = normalize(this.minDurationToWork, this.maxDurationToWork)
+    return (toWorkDurations: ToWorkDuration[]) => {
+      const sum = toWorkDurations.reduce((total, dur) => total + dur.duration.value, 0)
+      const avg = sum / toWorkDurations.length
+      return {
+        color: this.gradient.rgbAt(n(avg)).toHexString(),
+        average: avg,
+        text: moment.duration(avg, 'seconds').format('m [min]')
+      }
+    }
+  }
+}
+
+export function normalize (min: number, max: number): (v: number) => number {
   const delta = max - min
   return function (val: number): number {
     return (val - min) / delta
