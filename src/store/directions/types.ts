@@ -1,16 +1,12 @@
 import { Location } from '../properties/types'
 
-export interface ToWorkData {
-  durations: ToWorkDuration[],
-  minDuration: number,
-  maxDuration: number
-}
 export interface ToWorkDuration {
   location: Location,
-  duration: number,
+  duration: string,
+  color: string,
 }
 
 export interface DirectionsState {
   mapRaster: Location[],
-  toWorkDurations: ToWorkData
+  toWorkDurations: ToWorkDuration[]
 }

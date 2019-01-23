@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex'
-import { DirectionsState, ToWorkData } from './types'
+import { DirectionsState, ToWorkDuration } from './types'
 import { Location } from '../properties/types'
 import { RootState } from '../types'
 import { propertiesService } from '../../services'
@@ -18,7 +18,7 @@ export const actions: ActionTree<DirectionsState, RootState> = {
   getToWorkDurations ({ dispatch, commit }) {
     propertiesService.toWorkDurations()
       .then(
-        (durations: ToWorkData) => {
+        (durations: ToWorkDuration[]) => {
           commit('setDurations', durations)
         },
         error => {
