@@ -3,8 +3,18 @@
   <l-control-layers position="topright" :hideSingleBase="true"></l-control-layers>
   <l-tile-layer :url="url" :attribution="attribution" layerType="base" name="Map"></l-tile-layer>
   <l-control class="leaflet-control-layers" position="topright" >
-      <a class="leaflet-control-layers-toggle" href="#" title="Colormaps" v-if="!controlHover" @mouseover="controlHover = true"></a>
-      <div v-else style="color: #000" @mouseleave="controlHover = false">HELLO00000000000ll!</br>fooooooooooooo</br>asdfasdf</br></div>
+      <a class="leaflet-control-layers-toggle" href="#" title="Colormaps" v-if="!controlHover" @click="controlHover = true"></a>
+      <v-card v-else class="pa-2">
+        <v-combobox
+          v-model="colormap"
+          :items="colormaps"
+          label="Time to work colormap"
+          persistent-hint
+          attach=".boxhere">
+        </v-combobox>
+        <div class="boxhere"></div>
+        <v-btn @click="controlHover = false">Close</v-btn>
+      </v-card>
   </l-control>
   <l-layer-group layerType="overlay" name="Time to Work">
     <DurationsField></DurationsField>
@@ -26,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Emit, Watch } from 'vue-property-decorator'
+  import { Component, Vue, Emit, Watch } from 'vue-property-decorator'
 import {
   LLayerGroup,
   LControlLayers,
@@ -38,7 +48,6 @@ import {
   LPolyline,
   LControl
 } from 'vue2-leaflet'
-
 import { State, Action, namespace } from 'vuex-class'
 import * as polyline from '@mapbox/polyline'
 
@@ -62,7 +71,7 @@ const dirns = namespace('directions')
   LControl,
   Route,
   PropQuadTree,
-  DurationsField
+  DurationsField,
 }})
 export default class Map extends Vue {
   url: string = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png' +
@@ -77,19 +86,44 @@ export default class Map extends Vue {
   fetchedIcon = greenIcon
   selectedIcon = redIcon
   controlHover = false
-
+  
   @propns.State properties
   @propns.State currentProperty
   @propns.Getter isCurrentProperty
   @dirns.State mapRaster
+  @dirns.State('colormap') _colormap
+  @dirns.State colormaps
+  @dirns.Mutation setColormap
   @dirns.Action getMapRaster
-
+  @dirns.Action getColormaps
+  @dirns.Action getToWorkDurations
+  
   $refs!: {
-    map: LMap
+    map: LMap,
   }
-
+  
   onResize () {
     this.$refs.map.mapObject.invalidateSize()
+  }
+  
+  beforeMount () {
+    this.getColormaps()
+  }
+
+  disableShit (e) {
+    L.DomEvent.stopPropagation(e)
+  }
+  
+  get colormap () {
+    return this._colormap
+  }
+  
+  set colormap (colormap: string) {
+    console.log(colormap)
+    if this._colormap !== colormap {
+      this.setColormap(colormap)
+      this.getToWorkDurations()
+    }
   }
 
   propIcon (prop: Property) {
@@ -119,3 +153,8 @@ export default class Map extends Vue {
   }
 }
 </script>
+<style scoped>
+  .v-menu__content {
+    position: inherit
+  }
+</style>

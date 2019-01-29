@@ -8,5 +8,11 @@ export const mutations: MutationTree<DirectionsState> = {
   },
   setDurations (state, durations: ToWorkDuration[]) {
     state.toWorkDurations = durations
+  },
+  setColormaps (state, colormaps: string[]) {
+    state.colormaps = colormaps
+  },
+  setColormap (state, colormap: string | null) {
+    state.colormap = colormap
   }
 }

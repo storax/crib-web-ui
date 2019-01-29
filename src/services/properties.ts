@@ -41,16 +41,27 @@ export const propertiesService = {
       .then(response => { return response.data })
       .catch(handle401)
   },
-  toWorkDurations: () => {
+  toWorkDurations: (colormap: string) => {
     const config = {
       method: 'get',
-      url: '/directions/to_work_durations'
+      url: '/directions/to_work_durations',
+      params: {
+        colormap: colormap
+      }
+    }
+    return cribReq(config)
+      .then(response => { return response.data })
+      .catch(handle401)
+  },
+  colormaps: () => {
+    const config ={
+      method: 'get',
+      url: '/directions/colormaps'
     }
     return cribReq(config)
       .then(response => { return response.data })
       .catch(handle401)
   }
-
 }
 
 function handle401 (error: any) {

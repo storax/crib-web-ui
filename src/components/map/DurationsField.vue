@@ -1,22 +1,12 @@
 <template>
-  <l-feature-group>
-    <l-circle
-      v-for="(duration, index) in toWorkDurations"
-      :key="index"
-      :lat-lng="duration.location"
-      :radius="100"
-      :stroke="false"
-      :fillOpacity="0.5"
-      :fillColor="duration.color">
-      <l-tooltip>{{duration.duration}}</l-tooltip>
-    </l-circle>
+  <l-feature-group ref="layer">
   </l-feature-group>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
-import { LCircle, LFeatureGroup, LTooltip } from 'vue2-leaflet'
+import { LCircle, LFeatureGroup, LTooltip, L } from 'vue2-leaflet'
 
 const dirns = namespace('directions')
 
@@ -27,10 +17,39 @@ const dirns = namespace('directions')
 }})
 export default class DurationsField extends Vue {
   @dirns.State toWorkDurations
-  @dirns.Action getToWorkDurations
+  layerOpject = null
+  renderer = L.canvas({ padding: 0.5 })
+  circles = []
 
-  beforeMount () {
-    this.getToWorkDurations()
+  $refs!: {
+    layer: LFeatureGroup
+  }
+
+  mounted () {
+    this.$nextTick(() => {
+      this.layerObject = this.$refs.layer.mapObject
+      this.draw()
+    })
+  }
+
+  draw () {
+    if (this.layerObject) {
+      this.layerObject.clearLayers()
+      for (let duration of this.toWorkDurations) {
+        const circle = L.circle(duration.location, {
+          renderer: this.renderer,
+          fillColor: duration.color,
+          stroke: false,
+          fillOpacity: 0.5,
+          radius: 100
+        }).bindTooltip(duration.duration).addTo(this.layerObject)
+      }
+    }
+  }
+
+  @Watch('toWorkDurations')
+  onChange (newVal) {
+    this.draw()
   }
 }
 </script>

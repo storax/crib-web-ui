@@ -15,11 +15,26 @@ export const actions: ActionTree<DirectionsState, RootState> = {
           dispatch('alert/error', error.message, { root: true })
         })
   },
-  getToWorkDurations ({ dispatch, commit }) {
-    propertiesService.toWorkDurations()
+  getToWorkDurations ({ dispatch, commit, state }) {
+    if (state.colormap) {
+      propertiesService.toWorkDurations(state.colormap)
+        .then(
+          (durations: ToWorkDuration[]) => {
+            commit('setDurations', durations)
+          },
+          error => {
+            dispatch('alert/error', error.message, { root: true })
+          }
+        )
+    }
+  },
+  getColormaps ({ dispatch, commit }) {
+    propertiesService.colormaps()
       .then(
-        (durations: ToWorkDuration[]) => {
-          commit('setDurations', durations)
+        (colormaps: string[]) => {
+          commit('setColormaps', colormaps)
+          commit('setColormap', colormaps[0])
+          dispatch('getToWorkDurations')
         },
         error => {
           dispatch('alert/error', error.message, { root: true })

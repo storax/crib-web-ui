@@ -9,4 +9,6 @@ export interface ToWorkDuration {
 export interface DirectionsState {
   mapRaster: Location[],
   toWorkDurations: ToWorkDuration[]
+  colormap: string | null
+  colormaps: string[]
 }

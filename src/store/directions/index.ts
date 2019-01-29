@@ -6,7 +6,9 @@ import { RootState } from '../types'
 
 export const state: DirectionsState = {
   mapRaster: [],
-  toWorkDurations: []
+  toWorkDurations: [],
+  colormap: null,
+  colormaps: []
 }
 
 const namespaced: boolean = true
