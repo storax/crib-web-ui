@@ -22,7 +22,7 @@ export const propertiesService = {
   toWork: (property: Property) => {
     const config = {
       method: 'get',
-      url: '/directions/to_work',
+      url: '/properties/to_work',
       params: {
         prop_id: property.id,
         mode: 'transit'
