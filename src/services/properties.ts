@@ -41,12 +41,13 @@ export const propertiesService = {
       .then(response => { return response.data })
       .catch(handle401)
   },
-  toWorkDurations: (colormap: string) => {
+  toWorkDurations: (colormap: string, maxDuration: number) => {
     const config = {
       method: 'get',
       url: '/directions/to_work_durations',
       params: {
-        colormap: colormap
+        colormap: colormap,
+        maxDuration: maxDuration
       }
     }
     return cribReq(config)

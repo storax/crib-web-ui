@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
+  import { Component, Vue, Watch } from 'vue-property-decorator'
 import { namespace } from 'vuex-class'
 import { LCircle, LFeatureGroup, LTooltip, L } from 'vue2-leaflet'
 
@@ -20,18 +20,18 @@ export default class DurationsField extends Vue {
   layerOpject = null
   renderer = L.canvas({ padding: 0.5 })
   circles = []
-
+  
   $refs!: {
     layer: LFeatureGroup
   }
-
+  
   mounted () {
     this.$nextTick(() => {
       this.layerObject = this.$refs.layer.mapObject
       this.draw()
     })
   }
-
+  
   draw () {
     if (this.layerObject) {
       this.layerObject.clearLayers()

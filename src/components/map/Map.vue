@@ -1,20 +1,42 @@
 <template>
-<l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0" @update:bounds="boundsUpdated">
+<l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0">
   <l-control-layers position="topright" :hideSingleBase="true"></l-control-layers>
   <l-tile-layer :url="url" :attribution="attribution" layerType="base" name="Map"></l-tile-layer>
   <l-control class="leaflet-control-layers" position="topright" >
-      <a class="leaflet-control-layers-toggle" href="#" title="Colormaps" v-if="!controlHover" @click="controlHover = true"></a>
-      <v-card v-else class="pa-2">
-        <v-combobox
-          v-model="colormap"
-          :items="colormaps"
-          label="Time to work colormap"
-          persistent-hint
-          attach=".boxhere">
-        </v-combobox>
-        <div class="boxhere"></div>
-        <v-btn @click="controlHover = false">Close</v-btn>
-      </v-card>
+    <a class="leaflet-control-layers-toggle" href="#" title="Colormaps" v-if="!controlHover" @click="controlHover = true"></a>
+    <v-card v-else class="pa-2">
+      <v-subheader>Max time (m)</v-subheader>
+      <v-layout row>
+        <v-flex class="pr-3">
+          <v-slider
+            v-model="maxDurationSelection"
+            v-on:start="startMaxDurationSelect"
+            v-on:end="endMaxDurationSelect"
+          ></v-slider>
+        </v-flex>
+        <v-flex shrink style="width: 60px">
+          <v-text-field
+            v-model="maxDurationSelection"
+            class="mt-0"
+            hide-details
+            single-line
+            readonly
+            type="number"
+          ></v-text-field>
+        </v-flex>
+
+      </v-layout>
+
+      <v-combobox
+        v-model="colormap"
+        :items="colormaps"
+        label="Time to work colormap"
+        persistent-hint
+        attach=".boxhere">
+      </v-combobox>
+      <div class="boxhere"></div>
+      <v-btn @click="controlHover = false">Close</v-btn>
+    </v-card>
   </l-control>
   <l-layer-group layerType="overlay" name="Time to Work">
     <DurationsField></DurationsField>
@@ -86,6 +108,7 @@ export default class Map extends Vue {
   fetchedIcon = greenIcon
   selectedIcon = redIcon
   controlHover = false
+  maxDurationSliding = false
   
   @propns.State properties
   @propns.State currentProperty
@@ -93,7 +116,9 @@ export default class Map extends Vue {
   @dirns.State mapRaster
   @dirns.State('colormap') _colormap
   @dirns.State colormaps
+  @dirns.State('maxDuration') _maxDuration
   @dirns.Mutation setColormap
+  @dirns.Mutation setMaxDuration
   @dirns.Action getMapRaster
   @dirns.Action getColormaps
   @dirns.Action getToWorkDurations
@@ -109,7 +134,7 @@ export default class Map extends Vue {
   beforeMount () {
     this.getColormaps()
   }
-
+  
   disableShit (e) {
     L.DomEvent.stopPropagation(e)
   }
@@ -119,11 +144,33 @@ export default class Map extends Vue {
   }
   
   set colormap (colormap: string) {
-    console.log(colormap)
     if this._colormap !== colormap {
       this.setColormap(colormap)
       this.getToWorkDurations()
     }
+  }
+  
+  get maxDurationSelection () {
+    return this._maxDuration / 60
+  }
+  
+  set maxDurationSelection (maxDuration: number) {
+    if (!this.maxDurationSliding) {
+      const dur = maxDuration * 60
+      if this._maxDuration !== dur {
+        this.setMaxDuration(dur)
+        this.getToWorkDurations()
+      }
+    }
+  }
+  
+  startMaxDurationSelect (maxDuration: number) {
+    this.maxDurationSliding = true
+  }
+
+  endMaxDurationSelect (maxDuration: number) {
+    this.maxDurationSliding = false
+    this.maxDurationSelection = maxDuration
   }
 
   propIcon (prop: Property) {
@@ -147,9 +194,6 @@ export default class Map extends Vue {
 
   get getProps (): Property[] {
     return this.properties
-  }
-  boundsUpdated (bounds) {
-    console.log(bounds)
   }
 }
 </script>

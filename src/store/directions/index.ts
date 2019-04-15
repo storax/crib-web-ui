@@ -8,7 +8,8 @@ export const state: DirectionsState = {
   mapRaster: [],
   toWorkDurations: [],
   colormap: null,
-  colormaps: []
+  colormaps: [],
+  maxDuration: 3000
 }
 
 const namespaced: boolean = true

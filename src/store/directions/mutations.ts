@@ -14,5 +14,8 @@ export const mutations: MutationTree<DirectionsState> = {
   },
   setColormap (state, colormap: string | null) {
     state.colormap = colormap
+  },
+  setMaxDuration (state, dur: number) {
+    state.maxDuration = dur
   }
 }

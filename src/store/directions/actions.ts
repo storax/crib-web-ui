@@ -17,7 +17,7 @@ export const actions: ActionTree<DirectionsState, RootState> = {
   },
   getToWorkDurations ({ dispatch, commit, state }) {
     if (state.colormap) {
-      propertiesService.toWorkDurations(state.colormap)
+      propertiesService.toWorkDurations(state.colormap, state.maxDuration)
         .then(
           (durations: ToWorkDuration[]) => {
             commit('setDurations', durations)
