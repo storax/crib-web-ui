@@ -35,5 +35,25 @@ export const actions: ActionTree<PropertiesState, RootState> = {
   },
   setCurrentProperty ({ commit }, property: Property) {
     commit('setCurrentProperty', property)
+  },
+  favorite ({ dispatch, commit }, property: Property) {
+    propertiesService.favorite(property)
+      .then(
+        () => {
+          commit('favorite', { property: property })
+        },
+        error => {
+          dispatch('alert/error', error.message, { root: true })
+        })
+  },
+  ban ({ dispatch, commit }, property: Property) {
+    propertiesService.ban(property)
+      .then(
+        () => {
+          commit('ban', { property: property })
+        },
+        error => {
+          dispatch('alert/error', error.message, { root: true })
+        })
   }
 }

@@ -1,5 +1,4 @@
 import { cribReq } from '../utils'
-import { userService } from './user'
 import { Property } from '../store/properties/types'
 
 export const propertiesService = {
@@ -17,7 +16,6 @@ export const propertiesService = {
     }
     return cribReq(config)
       .then(response => { return response.data })
-      .catch(handle401)
   },
   toWork: (property: Property) => {
     const config = {
@@ -25,12 +23,12 @@ export const propertiesService = {
       url: '/properties/to_work',
       params: {
         prop_id: property.id,
-        mode: 'transit'
+        mode: 'transit',
+        refresh: true
       }
     }
     return cribReq(config)
       .then(response => { return response.data })
-      .catch(handle401)
   },
   rasterMap: () => {
     const config = {
@@ -39,7 +37,6 @@ export const propertiesService = {
     }
     return cribReq(config)
       .then(response => { return response.data })
-      .catch(handle401)
   },
   toWorkDurations: (colormap: string, maxDuration: number) => {
     const config = {
@@ -52,7 +49,6 @@ export const propertiesService = {
     }
     return cribReq(config)
       .then(response => { return response.data })
-      .catch(handle401)
   },
   colormaps: () => {
     const config ={
@@ -61,15 +57,30 @@ export const propertiesService = {
     }
     return cribReq(config)
       .then(response => { return response.data })
-      .catch(handle401)
+  },
+  favorite: (property: Property) => {
+    const config = {
+      method: 'put',
+      url: '/properties/favorite',
+      data: {
+        prop_id: property.id,
+        favorite: !property.favorite
+      }
+    }
+    return cribReq(config)
+      .then(response => { return response.data })
+  },
+  ban: (property: Property) => {
+    const config = {
+      method: 'put',
+      url: '/properties/ban',
+      data: {
+        prop_id: property.id,
+        banned: !property.banned
+      }
+    }
+    return cribReq(config)
+      .then(response => { return response.data })
   }
 }
 
-function handle401 (error: any) {
-  if (error.response && error.response.status === 401) {
-    console.log('logout')
-    userService.logout()
-    location.reload(true)
-  }
-  return Promise.reject(error)
-}

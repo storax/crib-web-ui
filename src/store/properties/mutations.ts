@@ -21,5 +21,11 @@ export const mutations: MutationTree<PropertiesState> = {
   },
   setRoute (state, { property, routedata }) {
     Vue.set(property, 'toWork', routedata)
+  },
+  favorite (state, { property }) {
+    Vue.set(property, 'favorite', !property.favorite)
+  },
+  ban (state, { property }) {
+    Vue.set(property, 'banned', !property.banned)
   }
 }

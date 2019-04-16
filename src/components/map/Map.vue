@@ -105,7 +105,7 @@ export default class Map extends Vue {
   zoom: number = 12,
   center: [number, number] = [51.505, -0.09]
   defaultIcon = new L.Icon.Default()
-  fetchedIcon = greenIcon
+  favIcon = greenIcon
   selectedIcon = redIcon
   controlHover = false
   maxDurationSliding = false
@@ -176,8 +176,8 @@ export default class Map extends Vue {
   propIcon (prop: Property) {
     if this.isCurrentProperty(prop) {
       return this.selectedIcon
-    } else if (prop.toWork.steps) {
-      return this.fetchedIcon
+    } else if (prop.favorite) {
+      return this.favIcon
     } else {
       return this.defaultIcon
     }

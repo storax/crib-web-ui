@@ -59,7 +59,7 @@ cribReq.interceptors.response.use(function (response) {
   const { config, response } = error
   const originalRequest = config
 
-  if (response.status === 401) {
+  if (response && response.status === 401) {
     if (originalRequest.baseURL + 'auth/refresh' === originalRequest.url) {
       isAlreadyFetchingAccessToken = false
       userService.logout()

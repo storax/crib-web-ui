@@ -21,6 +21,8 @@ export interface Property {
   price: Price,
   location: Location,
   toWork: RouteData
+  banned: boolean,
+  favorite: boolean
 }
 
 export interface LatLng {
