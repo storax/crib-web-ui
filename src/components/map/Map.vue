@@ -77,7 +77,7 @@ import { Property, RouteData } from '../../store/properties/types'
 import Route from './Route'
 import PropQuadTree from './PropQuadTree'
 import DurationsField from './DurationsField'
-import { redIcon, greenIcon } from './icons'
+import { redIcon, greenIcon, greyIcon } from './icons'
 
 const propns = namespace('properties')
 const dirns = namespace('directions')
@@ -107,6 +107,7 @@ export default class Map extends Vue {
   defaultIcon = new L.Icon.Default()
   favIcon = greenIcon
   selectedIcon = redIcon
+  bannedIcon = greyIcon
   controlHover = false
   maxDurationSliding = false
   
@@ -176,6 +177,8 @@ export default class Map extends Vue {
   propIcon (prop: Property) {
     if this.isCurrentProperty(prop) {
       return this.selectedIcon
+    } else if (prop.banned) {
+      return this.bannedIcon
     } else if (prop.favorite) {
       return this.favIcon
     } else {

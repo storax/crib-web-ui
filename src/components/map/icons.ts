@@ -18,3 +18,13 @@ export const greenIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 })
+
+export const greyIcon = new L.Icon({
+  iconRetinaUrl: require('../../assets/marker-icon-2x-grey.png'),
+  iconUrl: require('../../assets/marker-icon-grey.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+})
