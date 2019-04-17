@@ -39,7 +39,7 @@ const propns = namespace('properties')
   Map,
   PropertyDetails
 }})
-export default class PropertyViewer extends Vue {
+export default class PropertyMapViewer extends Vue {
   @propns.Action getProperties
   @propns.Action('setCurrentProperty') showProperty
   @propns.Action toggleMap

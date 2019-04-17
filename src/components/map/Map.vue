@@ -75,7 +75,6 @@ import * as polyline from '@mapbox/polyline'
 
 import { Property, RouteData } from '../../store/properties/types'
 import Route from './Route'
-import PropQuadTree from './PropQuadTree'
 import DurationsField from './DurationsField'
 import { redIcon, greenIcon, greyIcon } from './icons'
 
@@ -92,7 +91,6 @@ const dirns = namespace('directions')
   LTooltip,
   LControl,
   Route,
-  PropQuadTree,
   DurationsField,
 }})
 export default class Map extends Vue {
