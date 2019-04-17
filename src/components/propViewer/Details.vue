@@ -19,20 +19,16 @@
     </v-flex>
     <v-layout row>
       <v-flex>
-        <v-btn @click="getToWork(propertyToView)">Directions</v-btn>
+        <DirectionsBtn :property="propertyToView"></DirectionsBtn>
       </v-flex>
       <v-flex>
-        <v-btn @click="favorite(propertyToView)" flat icon :color="propertyToView.favorite ? 'pink' : 'white'">
-          <v-icon>favorite</v-icon>
-        </v-btn>
+        <FavoriteBtn :property="propertyToView"></BanBtn>
       </v-flex>
       <v-flex>
-        <v-btn @click="ban(propertyToView)" flat icon :color="propertyToView.banned ? 'pink' : 'white'">
-          <v-icon>block</v-icon>
-        </v-btn>
+        <BanBtn :property="propertyToView"></BanBtn>
       </v-flex>
       <v-flex>
-        <v-btn :href="propertyToView.propertyUrl" target="_blank" class="green">View</v-btn>
+        <ViewBtn :property="propertyToView"></ViewBtn>
       </v-flex>
     </v-layout>
   <v-flex>
@@ -51,11 +47,19 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 
 import Carousel from './Carousel'
+import FavoriteBtn from './FavoriteBtn'
+import BanBtn from './BanBtn'
+import ViewBtn from './ViewBtn'
+import DirectionsBtn from './DirectionsBtn'
 
 const propns = namespace('properties')
 
 @Component({ components: {
-  Carousel
+  Carousel,
+  FavoriteBtn,
+  BanBtn,
+  ViewBtn,
+  DirectionsBtn
 }})
 export default class PropertyDetails extends Vue {
   @Prop(Property) propertyToView: Property
@@ -68,7 +72,7 @@ export default class PropertyDetails extends Vue {
   }
 
   get price () {
-    return '£' + this.propertyToView.price.amount + ' ppm'
+    return '£' + this.propertyToView.price.amount + ' pcm'
   }
 
   get allImages () {
