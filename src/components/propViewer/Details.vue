@@ -1,38 +1,40 @@
 <template>
 <v-layout column>
   <v-card style="padding: 1em; margin-left: 2em; margin-right: 2em">
-  <v-layout row>
-  <v-flex >
-    <h3>{{propertyToView.propertyTypeFullDescription}} {{propertyToView.displayAddress}}</h3>
-  </v-flex>
-  <v-flex class="text-lg-right">
-    <b>{{propertyToView.price.amount}} {{propertyToView.price.currencyCode}} {{propertyToView.price.frequency}}</b>
-  </v-flex>
-  </v-layout>
-</v-card>
+    <v-layout row>
+      <v-flex >
+        <h3>{{propertyToView.propertyTypeFullDescription}} {{propertyToView.displayAddress}}</h3>
+      </v-flex>
+      <v-flex class="text-lg-right">
+        <b>{{price}}</b>
+      </v-flex>
+      <v-flex class="text-lg-right">
+        <b>{{propertyToView.toWork.duration ? propertyToView.toWork.duration.text : ""}}</b>
+      </v-flex>
+    </v-layout>
+  </v-card>
   <v-layout column justify-center align-center>
-  <v-flex>
-    <Carousel ref="carousel" :images="allImages" style="width: 50em"></Carousel>
-  </v-flex>
-  <v-layout row>
-  <v-flex>
-    <v-btn @click="getToWork(propertyToView)">Directions</v-btn>
-  </v-flex>
-  <v-flex>
-    <v-btn @click="favorite(propertyToView)" flat icon :color="propertyToView.favorite ? 'pink' : 'white'">
-      <v-icon>favorite</v-icon>
-    </v-btn>
-  </v-flex>
-
-  <v-flex>
-    <v-btn @click="ban(propertyToView)" flat icon :color="propertyToView.banned ? 'pink' : 'white'">
-      <v-icon>block</v-icon>
-    </v-btn>
-  </v-flex>
-  <v-flex>
-    <v-btn :href="propertyToView.propertyUrl" target="_blank" class="green">View</v-btn>
-  </v-flex>
-  </v-layout>
+    <v-flex>
+      <Carousel ref="carousel" :images="allImages" style="width: 50em"></Carousel>
+    </v-flex>
+    <v-layout row>
+      <v-flex>
+        <v-btn @click="getToWork(propertyToView)">Directions</v-btn>
+      </v-flex>
+      <v-flex>
+        <v-btn @click="favorite(propertyToView)" flat icon :color="propertyToView.favorite ? 'pink' : 'white'">
+          <v-icon>favorite</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex>
+        <v-btn @click="ban(propertyToView)" flat icon :color="propertyToView.banned ? 'pink' : 'white'">
+          <v-icon>block</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex>
+        <v-btn :href="propertyToView.propertyUrl" target="_blank" class="green">View</v-btn>
+      </v-flex>
+    </v-layout>
   <v-flex>
     <div v-html="propertyToView.summary" style="width: 50em"></div>
   </v-flex>
@@ -63,6 +65,10 @@ export default class PropertyDetails extends Vue {
 
   $refs!: {
     carousel: Carousel
+  }
+
+  get price () {
+    return '£' + this.propertyToView.price.amount + ' ppm'
   }
 
   get allImages () {

@@ -36,6 +36,12 @@ export const actions: ActionTree<PropertiesState, RootState> = {
   setCurrentProperty ({ commit }, property: Property) {
     commit('setCurrentProperty', property)
   },
+  nextProperty ({ commit }) {
+    commit('nextProperty')
+  },
+  prevProperty ({ commit }) {
+    commit('prevProperty')
+  },
   favorite ({ dispatch, commit }, property: Property) {
     propertiesService.favorite(property)
       .then(
