@@ -1,6 +1,6 @@
 <template>
-<v-layout column>
-  <v-card style="padding: 1em; margin-left: 2em; margin-right: 2em">
+<v-layout column justify-center align-center>
+  <v-card style="padding: 1em; margin-left: 2em; margin-right: 2em; width: 50em">
     <v-layout row>
       <v-flex >
         <h3>{{propertyToView.propertyTypeFullDescription}} {{propertyToView.displayAddress}}</h3>
@@ -13,59 +13,31 @@
       </v-flex>
     </v-layout>
   </v-card>
-  <v-layout column justify-center align-center>
-    <v-flex>
-      <Carousel ref="carousel" :images="allImages" style="width: 50em"></Carousel>
-    </v-flex>
-    <v-layout row>
-      <v-flex>
-        <DirectionsBtn :property="propertyToView"></DirectionsBtn>
-      </v-flex>
-      <v-flex>
-        <FavoriteBtn :property="propertyToView"></BanBtn>
-      </v-flex>
-      <v-flex>
-        <BanBtn :property="propertyToView"></BanBtn>
-      </v-flex>
-      <v-flex>
-        <ViewBtn :property="propertyToView"></ViewBtn>
-      </v-flex>
-    </v-layout>
+  <v-flex>
+    <Carousel ref="carousel" :images="allImages" style="width: 50em"></Carousel>
+  </v-flex>
+  <v-flex>
+    <PropertyActions :property="propertyToView"></PropertiesActions>
+  </v-flex>
   <v-flex>
     <div v-html="propertyToView.summary" style="width: 50em"></div>
   </v-flex>
-  </v-layout>
 </v-layout>
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 import { Property } from '../../store/properties/types'
-import { Action, namespace } from 'vuex-class'
-
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
 
 import Carousel from './Carousel'
-import FavoriteBtn from './FavoriteBtn'
-import BanBtn from './BanBtn'
-import ViewBtn from './ViewBtn'
-import DirectionsBtn from './DirectionsBtn'
-
-const propns = namespace('properties')
+import PropertyActions from './PropertyActions'
 
 @Component({ components: {
   Carousel,
-  FavoriteBtn,
-  BanBtn,
-  ViewBtn,
-  DirectionsBtn
+  PropertyActions
 }})
 export default class PropertyDetails extends Vue {
   @Prop(Property) propertyToView: Property
-  @propns.Action getToWork
-  @propns.Action favorite
-  @propns.Action ban
 
   $refs!: {
     carousel: Carousel
