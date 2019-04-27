@@ -227,4 +227,7 @@ export default class Carousel extends Vue {
 .slick-current {
     opacity: 1
 }
+.slick-dotted.slick-slider {
+    margin-bottom: 0px
+}
 </style>

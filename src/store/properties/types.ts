@@ -2,6 +2,7 @@ export interface PropertiesState {
   gettingProperties: boolean,
   properties: Property[],
   currentProperty: Property | null
+  currentIndex: number,
   showMap: boolean,
 }
 
@@ -20,7 +21,7 @@ export interface Property {
   id: string,
   price: Price,
   location: Location,
-  toWork: RouteData
+  toWork: RouteData | null,
   banned: boolean,
   favorite: boolean
 }

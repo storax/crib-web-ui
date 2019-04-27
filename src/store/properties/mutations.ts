@@ -15,19 +15,23 @@ export const mutations: MutationTree<PropertiesState> = {
   },
   setCurrentProperty (state, property: Property) {
     state.currentProperty = property
+    state.currentIndex = state.properties.indexOf(property)
   },
   nextProperty (state) {
     if (state.currentProperty) {
-      const newProp = state.properties[(state.properties.indexOf(state.currentProperty) + 1) % state.properties.length]
+      const index = (state.currentIndex + 1) % state.properties.length
+      const newProp = state.properties[index]
       state.currentProperty = newProp
+      state.currentIndex = index
     }
   },
   prevProperty (state) {
     if (state.currentProperty) {
       const l = state.properties.length
-      const index = ((((state.properties.indexOf(state.currentProperty) - 1) % l) + l) % l)
+      const index = ((((state.currentIndex - 1) % l) + l) % l)
       const newProp = state.properties[index]
       state.currentProperty = newProp
+      state.currentIndex = index
     }
   },
   setShowMap (state, show: boolean) {

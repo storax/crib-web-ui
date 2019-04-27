@@ -9,6 +9,7 @@ export const state: PropertiesState = {
   gettingProperties: false,
   properties: [],
   currentProperty: null,
+  currentIndex: 0,
   showMap: true
 }
 
