@@ -102,11 +102,15 @@ export default class Route extends Vue {
     `
     if step.travel_mode === TravelMode.TRANSIT {
       const details = step.transit_details
+      let linename = details.line.name
+      if details.line.vehicle.type === 'BUS' {
+        linename = details.line.short_name + ' ' + details.line.name
+      }
       html = `
         <div class="transit-details">
           <div>
             <b style="color: ${details.line.color}">
-              ${details.line.short_name}
+              ${linename}
             </b></br>
             ${defaulthtml}
           </div>
