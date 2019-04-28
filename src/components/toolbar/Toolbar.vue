@@ -4,7 +4,7 @@
     <v-toolbar-title class="white--text">{{title}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <v-btn flat to="/map">Map</v-btn>
+      <v-btn flat to="/properties">Properties</v-btn>
       <v-btn flat to="/login">{{ logbtnText }}</v-btn>
     </v-toolbar-items>
   </v-toolbar>

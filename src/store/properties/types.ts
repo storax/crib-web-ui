@@ -1,9 +1,10 @@
 export interface PropertiesState {
-  gettingProperties: boolean,
-  properties: Property[],
+  gettingProperties: boolean
+  properties: Property[]
   currentProperty: Property | null
-  currentIndex: number,
-  showMap: boolean,
+  currentIndex: number
+  showMap: boolean
+  maxPrice: number
 }
 
 export interface Price {
@@ -13,31 +14,31 @@ export interface Price {
 }
 
 export interface Location {
-  latitude: number,
+  latitude: number
   longitude: number
 }
 
 export interface Property {
-  id: string,
-  price: Price,
-  location: Location,
-  toWork: RouteData | null,
-  banned: boolean,
+  id: string
+  price: Price
+  location: Location
+  toWork: RouteData | null
+  banned: boolean
   favorite: boolean
 }
 
 export interface LatLng {
-  lng: number,
+  lng: number
   lat: number
 }
 
 export interface Duration {
-  value: number,
+  value: number
   text: string
 }
 
 export interface Distance {
-  value: number,
+  value: number
   text: string
 }
 

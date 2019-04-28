@@ -1,5 +1,5 @@
 <template>
-<l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0">
+<l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0" class="maxheight">
   <l-control-layers position="topright" :hideSingleBase="true"></l-control-layers>
   <l-tile-layer :url="url" :attribution="attribution" layerType="base" name="Map"></l-tile-layer>
   <l-control class="leaflet-control-layers" position="topright" >
@@ -24,7 +24,6 @@
             type="number"
           ></v-text-field>
         </v-flex>
-
       </v-layout>
 
       <v-combobox
@@ -50,6 +49,7 @@
       :lat-lng="[item.location.latitude, item.location.longitude]"
       :key="item.id"
       :icon="propIcon(item)"
+      :zIndexOffset="markerOffset(item)"
       v-on:click="selectMarker(item)">
       <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
     </l-marker>
@@ -166,12 +166,12 @@ export default class Map extends Vue {
   startMaxDurationSelect (maxDuration: number) {
     this.maxDurationSliding = true
   }
-
+  
   endMaxDurationSelect (maxDuration: number) {
     this.maxDurationSliding = false
     this.maxDurationSelection = maxDuration
   }
-
+  
   propIcon (prop: Property) {
     if this.isCurrentProperty(prop) {
       return this.selectedIcon
@@ -181,6 +181,18 @@ export default class Map extends Vue {
       return this.favIcon
     } else {
       return this.defaultIcon
+    }
+  }
+  
+  markerOffset (prop: Property) {
+    if this.isCurrentProperty(prop) {
+      return 9000
+    } else if (prop.banned) {
+      return -1000
+    } else if (prop.favorite) {
+      return 1000
+    } else {
+      return 0
     }
   }
 
@@ -199,7 +211,12 @@ export default class Map extends Vue {
 }
 </script>
 <style scoped>
-  .v-menu__content {
+.v-menu__content {
     position: inherit
-  }
+}
+.maxheight {
+    position: fixed;
+    width: inherit;
+    max-height: calc(100vh - 13em);
+}
 </style>

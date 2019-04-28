@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <Toolbar :title="title"></Toolbar>
-    <v-content class="maxheight">
+    <v-content>
       <GlobalAlert></GlobalAlert>
       <router-view></router-view>
     </v-content>
@@ -51,9 +51,3 @@ export default class App extends Vue {
   }
 }
 </script>
-
-<style scoped>
-.maxheight {
-max-height: 100vh;
-}
-</style>

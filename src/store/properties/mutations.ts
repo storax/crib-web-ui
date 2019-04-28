@@ -25,6 +25,9 @@ export const mutations: MutationTree<PropertiesState> = {
       state.currentIndex = index
     }
   },
+  setMaxPrice (state, maxPrice: number) {
+    state.maxPrice = maxPrice
+  },
   prevProperty (state) {
     if (state.currentProperty) {
       const l = state.properties.length

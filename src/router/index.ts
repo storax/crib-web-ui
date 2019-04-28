@@ -12,12 +12,12 @@ const routes = [
     component: LoginPage
   },
   {
-    path: '/map',
+    path: '/properties',
     component: PropertyMapViewer
   },
   {
     path: '*',
-    redirect: '/map'
+    redirect: '/properties'
   }
 ]
 

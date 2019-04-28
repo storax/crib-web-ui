@@ -10,7 +10,8 @@ export const state: PropertiesState = {
   properties: [],
   currentProperty: null,
   currentIndex: 0,
-  showMap: true
+  showMap: true,
+  maxPrice: 1450
 }
 
 const namespaced: boolean = true

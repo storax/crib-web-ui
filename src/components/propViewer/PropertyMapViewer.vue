@@ -1,16 +1,19 @@
 <template>
-  <v-container fluid fill-height pa-0>
+<v-container fluid fill-height pa-0>
     <v-layout column>
-      <v-layout style="max-height: 100%">
-        <v-flex v-if="showMap" style="min-width: 60%">
+      <v-flex shrink>
+        <SearchBar></SearchBar>
+      </v-flex>
+      <v-layout>
+        <v-flex v-if="showMap" style="max-width: 60%; width: 60%">
           <Map @propertyClicked="showProperty($event)"></Map>
         </v-flex>
-        <v-flex class="scroll">
+        <v-flex>
           <PropertyDetails
             ref="details"
             v-if="currentProperty"
             :propertyToView="currentProperty"
-          ></PropertyDetails>
+            ></PropertyDetails>
         </v-flex>
       </v-layout>
       <v-flex shrink>
@@ -22,7 +25,7 @@
         </v-progress-linear>
       </v-flex>
     </v-layout>
-  </v-container>
+</v-container>
 </template>
 
 <script lang="ts">
@@ -32,12 +35,14 @@ import { State, Action, namespace } from 'vuex-class'
 import Map from '../map/Map'
 import PropertyDetails from './Details'
 import eventHub from '../../events'
+import SearchBar from './SearchBar'
 
 const propns = namespace('properties')
 
 @Component({components: {
   Map,
-  PropertyDetails
+  PropertyDetails,
+  SearchBar
 }})
 export default class PropertyMapViewer extends Vue {
   @propns.Action getProperties
@@ -45,6 +50,7 @@ export default class PropertyMapViewer extends Vue {
   @propns.Action toggleMap
   @propns.Action ban
   @propns.Action getToWork
+  @propns.Action setMaxPrice
   @propns.Action favorite
   @propns.Action nextProperty
   @propns.Action prevProperty
@@ -52,6 +58,7 @@ export default class PropertyMapViewer extends Vue {
   @propns.State currentProperty
   @propns.State properties
   @propns.State showMap
+  @propns.State maxPrice
   
   $refs!: {
     details: PropertyDetails,
@@ -96,8 +103,3 @@ export default class PropertyMapViewer extends Vue {
 }
 }
 </script>
-<style scoped>
-.scroll {
-  overflow: auto;
-}
-</style>

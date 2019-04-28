@@ -219,7 +219,7 @@ export default class Carousel extends Vue {
 }
 .slick-prev {
     left: 0px;
-    z-index: 2
+    z-index: 1
 }
 .slick-slide {
     opacity: 0.4

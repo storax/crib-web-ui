@@ -34,7 +34,6 @@ export const actions: ActionTree<DirectionsState, RootState> = {
         (colormaps: string[]) => {
           commit('setColormaps', colormaps)
           commit('setColormap', colormaps[0])
-          dispatch('getToWorkDurations')
         },
         error => {
           dispatch('alert/error', error.message, { root: true })

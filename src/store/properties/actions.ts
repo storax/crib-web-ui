@@ -7,7 +7,7 @@ export const actions: ActionTree<PropertiesState, RootState> = {
   getProperties ({ state, dispatch, commit }) {
     commit('propertyRequest')
 
-    propertiesService.find()
+    propertiesService.find(state.maxPrice)
       .then(
         (properties: Property[]) => {
           commit('setProperties', properties)
@@ -19,6 +19,12 @@ export const actions: ActionTree<PropertiesState, RootState> = {
           commit('propertiesError', error)
           dispatch('alert/error', error.message, { root: true })
         })
+  },
+  setMaxPrice ({ state, dispatch, commit }, maxPrice: number) {
+    if (state.maxPrice !== maxPrice) {
+      commit('setMaxPrice', maxPrice)
+      dispatch('getProperties')
+    }
   },
   getToWork ({ dispatch, commit }, property: Property) {
     propertiesService.toWork(property)
