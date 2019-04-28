@@ -9,7 +9,7 @@ export const state: DirectionsState = {
   toWorkDurations: [],
   colormap: null,
   colormaps: [],
-  maxDuration: 3000
+  maxDuration: 42 * 60
 }
 
 const namespaced: boolean = true

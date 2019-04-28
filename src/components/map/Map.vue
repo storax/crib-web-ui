@@ -40,9 +40,6 @@
   <l-layer-group layerType="overlay" name="Time to Work">
     <DurationsField></DurationsField>
   </l-layer-group>
-  <l-layer-group layerType="overlay" name="Routes">
-    <Route :route="route"></Route>
-  </l-layer-group>
   <l-layer-group layerType="overlay" name="Properties">
     <l-marker
       v-for="item in properties"
@@ -53,6 +50,9 @@
       v-on:click="selectMarker(item)">
       <l-tooltip >£{{ item.price.amount }} {{ item.price.frequency}}</l-tooltip>
     </l-marker>
+  </l-layer-group>
+  <l-layer-group layerType="overlay" name="Routes">
+    <Route :route="route"></Route>
   </l-layer-group>
 </l-map>
 </template>

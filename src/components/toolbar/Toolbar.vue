@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar app>
+  <v-toolbar app dense>
     <v-toolbar-side-icon></v-toolbar-side-icon>
     <v-toolbar-title class="white--text">{{title}}</v-toolbar-title>
     <v-spacer></v-spacer>

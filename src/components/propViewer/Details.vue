@@ -11,9 +11,6 @@
       <v-flex class="text-lg-right">
         <b>{{propertyToView.toWork ? propertyToView.toWork.duration.text : ""}}</b>
       </v-flex>
-      <v-flex class="text-lg-right">
-        <b>{{currentIndex + 1}} / {{count}}</b>
-      </v-flex>
     </v-layout>
   </v-card>
   <v-flex>
@@ -54,8 +51,6 @@ const propns = namespace('properties')
 }})
 export default class PropertyDetails extends Vue {
   @Prop(Property) propertyToView: Property
-  @propns.Getter count
-  @propns.State currentIndex
   
   $refs!: {
     carousel: Carousel
