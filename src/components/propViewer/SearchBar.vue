@@ -12,6 +12,18 @@
       
     </v-toolbar-items>
     <v-spacer></v-spacer>
+    <v-toolbar-items>
+      <v-btn flat :input-value="showMap" @click="toggleMap()">
+        <v-icon>map</v-icon>
+      </v-btn>
+      <v-btn flat :input-value="showDetails" @click="toggleDetails()">
+        <v-icon>description</v-icon>
+      </v-btn>
+      <v-btn flat :input-value="showList" @click="toggleList()">
+        <v-icon>list</v-icon>
+      </v-btn>
+    </v-toolbar-items>
+    <v-spacer></v-spacer>
     <v-flex shrink>
     <v-text-field
       v-model="propertyIndex"
@@ -38,7 +50,13 @@ export default class SearchBar extends Vue {
   @propns.Getter count
   @propns.State currentIndex
   @propns.State properties
+  @propns.State showMap
+  @propns.State showDetails
+  @propns.State showList
   @propns.Action setCurrentProperty
+  @propns.Action toggleMap
+  @propns.Action toggleDetails
+  @propns.Action toggleList
   
   prices = [1000, 1200, 1300, 1350, 1400, 1421, 1450, 1500]
   get priceSelection () {

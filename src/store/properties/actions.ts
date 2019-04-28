@@ -39,6 +39,12 @@ export const actions: ActionTree<PropertiesState, RootState> = {
   toggleMap ({ state, commit }) {
     commit('setShowMap', !state.showMap)
   },
+  toggleDetails ({ state, commit }) {
+    commit('setShowDetails', !state.showDetails)
+  },
+  toggleList ({ state, commit }) {
+    commit('setShowList', !state.showList)
+  },
   setCurrentProperty ({ commit }, property: Property) {
     commit('setCurrentProperty', property)
   },

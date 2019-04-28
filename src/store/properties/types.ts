@@ -4,6 +4,8 @@ export interface PropertiesState {
   currentProperty: Property | null
   currentIndex: number
   showMap: boolean
+  showDetails: boolean
+  showList: boolean
   maxPrice: number
 }
 
