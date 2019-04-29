@@ -48,8 +48,8 @@
         <v-spacer></v-spacer>
         <b>{{props.item.toWork ? props.item.toWork.duration.text : ""}}</b>
         <v-spacer></v-spacer>
-        <FavoriteBtn :property="props.item"></FavoriteBtn>
-        <BanBtn :property="props.item"></BanBtn>
+        <FavoriteBtn :property="props.item" class="small-btn"></FavoriteBtn>
+        <BanBtn :property="props.item" class="small-btn"></BanBtn>
       </v-card-actions>
     </v-card>
   </v-flex>
@@ -105,5 +105,8 @@ export default class PropertyList extends Vue {
   left: 4px;
   top: 4px;
   z-index: 1;
+}
+.small-btn {
+  height: 24px
 }
 </style>
