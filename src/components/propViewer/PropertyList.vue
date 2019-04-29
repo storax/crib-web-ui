@@ -8,9 +8,9 @@
       disable-initial-sort
       row wrap
     >
-        <v-flex slot="item" slot-scope="props">
-          <v-card v-bind:class="{ 'grey darken-1': props.selected}" @click="setCurrentProperty(props.item)" :id="'listentry' + props.index">
-            <v-card-title><h4>{{ props.item.propertyTypeFullDescription }} {{ props.item.displayAddress }}</h4></v-card-title>
+      <v-flex slot="item" slot-scope="props" lg4>
+          <v-card v-bind:class="{ 'grey darken-1': props.selected, 'ma-1': true}" @click="setCurrentProperty(props.item)" :id="'listentry' + props.index">
+            <v-card-title class="text-truncate"><h4>{{ props.item.propertyTypeFullDescription }} {{ props.item.displayAddress }}</h4></v-card-title>
             <v-layout row>
             <v-img
               :src="props.item.propertyImages[0]"
@@ -48,7 +48,7 @@ export default class PropertyList extends Vue {
   @Watch('currentIndex')
   onChange (newVal) {
     this.adjustPage()
-    this.$vuetify.goTo('#listentry' + this.currentIndex % this.pagination.rowsPerPage, {offset: -100})
+    // this.$vuetify.goTo('#listentry' + this.currentIndex % this.pagination.rowsPerPage, {offset: -100})
   }
   
   adjustPage () {
