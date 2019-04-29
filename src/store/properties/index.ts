@@ -10,9 +10,9 @@ export const state: PropertiesState = {
   properties: [],
   currentProperty: null,
   currentIndex: 0,
-  showMap: true,
+  showMap: false,
   showDetails: true,
-  showList: false,
+  showList: true,
   maxPrice: 1450
 }
 
