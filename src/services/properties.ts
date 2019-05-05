@@ -54,6 +54,14 @@ export const propertiesService = {
     return cribReq(config)
       .then(response => { return response.data })
   },
+  get_area: () => {
+    const config ={
+      method: 'get',
+      url: '/directions/get_area'
+    }
+    return cribReq(config)
+      .then(response => { return response.data })
+  },
   favorite: (property: Property) => {
     const config = {
       method: 'put',
