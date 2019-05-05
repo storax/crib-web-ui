@@ -13,4 +13,5 @@ export interface DirectionsState {
   colormap: string | null,
   colormaps: string[],
   maxDuration: number,
+  area: any,
 }

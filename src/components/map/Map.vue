@@ -54,6 +54,12 @@
   <l-layer-group layerType="overlay" name="Routes">
     <Route :route="route"></Route>
   </l-layer-group>
+  <l-layer-group layerType="overlay" name="Route Area">
+    <l-geo-json
+      :geojson="routearea"
+      :options-style="routeareastyle"
+      ></l-geo-json>
+  </l-layer-group>
 </l-map>
 </template>
 
@@ -68,6 +74,7 @@ import {
   LPopup,
   LTooltip,
   LPolyline,
+  LGeoJson,
   LControl
 } from 'vue2-leaflet'
 import { State, Action, namespace } from 'vuex-class'
@@ -90,6 +97,7 @@ const dirns = namespace('directions')
   LPopup,
   LTooltip,
   LControl,
+  LGeoJson,
   Route,
   DurationsField,
 }})
@@ -101,13 +109,20 @@ export default class Map extends Vue {
 		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
   zoom: number = 12,
-  center: [number, number] = [51.505, -0.09]
+  center: [number, number] = [51.417386, -0.1943391]
   defaultIcon = new L.Icon.Default()
   favIcon = greenIcon
   selectedIcon = redIcon
   bannedIcon = greyIcon
   controlHover = false
   maxDurationSliding = false
+  routeareastyle = {
+    weight: 2,
+    color: "cyan",
+    opacity: 0.7,
+    fillColor: "cyan",
+    fillOpacity: 0.5
+  }
   
   @propns.State properties
   @propns.State currentProperty
@@ -116,11 +131,13 @@ export default class Map extends Vue {
   @dirns.State('colormap') _colormap
   @dirns.State colormaps
   @dirns.State('maxDuration') _maxDuration
+  @dirns.State('area') routearea
   @dirns.Mutation setColormap
   @dirns.Mutation setMaxDuration
   @dirns.Action getMapRaster
   @dirns.Action getColormaps
   @dirns.Action getToWorkDurations
+  @dirns.Action getArea
   
   $refs!: {
     map: LMap,
@@ -132,6 +149,7 @@ export default class Map extends Vue {
   
   beforeMount () {
     this.getColormaps()
+    this.getArea()
   }
   
   disableShit (e) {

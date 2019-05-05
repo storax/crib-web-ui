@@ -60,7 +60,7 @@ export const propertiesService = {
       url: '/directions/get_area'
     }
     return cribReq(config)
-      .then(response => { return response.data })
+      .then(response => {return response.data})
   },
   favorite: (property: Property) => {
     const config = {
@@ -84,7 +84,6 @@ export const propertiesService = {
       }
     }
     return cribReq(config)
-      .then(response => { return response.data })
+      .then(response => {return response.data})
   }
 }
-

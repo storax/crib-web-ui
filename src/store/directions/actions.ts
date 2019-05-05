@@ -39,5 +39,14 @@ export const actions: ActionTree<DirectionsState, RootState> = {
           dispatch('alert/error', error.message, { root: true })
         }
       )
+  },
+  getArea ({ dispatch, commit }) {
+    propertiesService.get_area()
+      .then(
+        (data: any) => {commit('setArea', data)},
+        error => {
+          dispatch('alert/error', error.message, { root: true })
+        }
+      )
   }
 }

@@ -17,5 +17,8 @@ export const mutations: MutationTree<DirectionsState> = {
   },
   setMaxDuration (state, dur: number) {
     state.maxDuration = dur
+  },
+  setArea (state, area: any) {
+    state.area = area
   }
 }
