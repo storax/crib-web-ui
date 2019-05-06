@@ -121,7 +121,7 @@ export default class Map extends Vue {
     color: "cyan",
     opacity: 0.7,
     fillColor: "cyan",
-    fillOpacity: 0.5
+    fillOpacity: 0.2
   }
   
   @propns.State properties
@@ -164,6 +164,7 @@ export default class Map extends Vue {
     if this._colormap !== colormap {
       this.setColormap(colormap)
       this.getToWorkDurations()
+      this.getArea()
     }
   }
   
@@ -177,6 +178,7 @@ export default class Map extends Vue {
       if this._maxDuration !== dur {
         this.setMaxDuration(dur)
         this.getToWorkDurations()
+        this.getArea()
       }
     }
   }

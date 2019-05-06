@@ -40,8 +40,8 @@ export const actions: ActionTree<DirectionsState, RootState> = {
         }
       )
   },
-  getArea ({ dispatch, commit }) {
-    propertiesService.get_area()
+  getArea ({ dispatch, commit, state }) {
+    propertiesService.get_area(state.maxDuration)
       .then(
         (data: any) => {commit('setArea', data)},
         error => {

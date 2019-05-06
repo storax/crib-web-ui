@@ -54,10 +54,13 @@ export const propertiesService = {
     return cribReq(config)
       .then(response => { return response.data })
   },
-  get_area: () => {
+  get_area: (maxDuration: number) => {
     const config ={
       method: 'get',
-      url: '/directions/get_area'
+      url: '/directions/get_area',
+      params: {
+        maxDuration: maxDuration
+      }
     }
     return cribReq(config)
       .then(response => {return response.data})
