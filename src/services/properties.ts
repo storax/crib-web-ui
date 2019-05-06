@@ -2,12 +2,13 @@ import { cribReq } from '../utils'
 import { Property } from '../store/properties/types'
 
 export const propertiesService = {
-  find: (maxPrice: number) => {
+  find: (maxPrice: number, maxDuration: number) => {
     const config = {
       method: 'post',
       url: '/properties/find',
       data: {
-        max_price: maxPrice
+        max_price: maxPrice,
+        max_duration: maxDuration
       }
     }
     return cribReq(config)

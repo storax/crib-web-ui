@@ -1,6 +1,9 @@
 <template>
 <v-toolbar dense>
   <v-toolbar-items>
+    <v-btn flat @click="getProperties">
+      <v-icon>search</v-icon>
+    </v-btn>
     <v-combobox
       class="mr-4"
       v-model="priceSelection"
@@ -56,6 +59,7 @@ const dirns = namespace('directions')
 export default class SearchBar extends Vue {
   @propns.State maxPrice
   @propns.Action setMaxPrice
+  @propns.Action getProperties
   @propns.Getter count
   @propns.State currentIndex
   @propns.State properties

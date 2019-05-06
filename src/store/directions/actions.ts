@@ -48,5 +48,5 @@ export const actions: ActionTree<DirectionsState, RootState> = {
           dispatch('alert/error', error.message, { root: true })
         }
       )
-  }
+  },
 }

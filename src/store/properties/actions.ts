@@ -4,10 +4,10 @@ import { RootState } from '../types'
 import { propertiesService } from '../../services'
 
 export const actions: ActionTree<PropertiesState, RootState> = {
-  getProperties ({ state, dispatch, commit }) {
+  getProperties ({ state, dispatch, commit, rootState }) {
     commit('propertyRequest')
 
-    propertiesService.find(state.maxPrice)
+    propertiesService.find(state.maxPrice, rootState.directions.maxDuration)
       .then(
         (properties: Property[]) => {
           commit('setProperties', properties)
