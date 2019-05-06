@@ -109,7 +109,7 @@ export default class Map extends Vue {
 		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
   zoom: number = 12,
-  center: [number, number] = [51.417386, -0.1943391]
+  center: [number, number] = [51.505, -0.09]
   defaultIcon = new L.Icon.Default()
   favIcon = greenIcon
   selectedIcon = redIcon
