@@ -1,6 +1,7 @@
 <template>
   <v-alert shrink
      class="ma-0"
+     dismissible
      :value="alertmessage"
      :type="alerttype"
      transition="scale-transition">

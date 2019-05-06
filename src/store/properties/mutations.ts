@@ -39,18 +39,14 @@ export const mutations: MutationTree<PropertiesState> = {
   },
   setShowMap (state, show: boolean) {
     state.showMap = show
-    if (state.showMap && state.showList) {
-      state.showList = false
-    }
+    state.showList = !show
   },
   setShowDetails (state, show: boolean) {
     state.showDetails = show
   },
   setShowList (state, show: boolean) {
     state.showList = show
-    if (state.showList && state.showMap) {
-      state.showMap = false
-    }
+    state.showMap = !show
   },
   setRoute (state, { property, routedata }) {
     Vue.set(property, 'toWork', routedata)
