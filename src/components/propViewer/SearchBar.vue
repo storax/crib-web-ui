@@ -1,30 +1,38 @@
 <template>
-  <v-toolbar dense>
-    <v-toolbar-items>
-      <v-combobox
-        v-model="priceSelection"
-        :items="prices"
-        label="Max. Price"
-        type="number"
-        hint="Set maximum pcm."
-        prefix="£"
-        ></v-combobox>
-      
-    </v-toolbar-items>
-    <v-spacer></v-spacer>
-    <v-toolbar-items>
-      <v-btn flat :input-value="showMap" @click="toggleMap()">
-        <v-icon>map</v-icon>
-      </v-btn>
-      <v-btn flat :input-value="showDetails" @click="toggleDetails()">
-        <v-icon>description</v-icon>
-      </v-btn>
-      <v-btn flat :input-value="showList" @click="toggleList()">
-        <v-icon>list</v-icon>
-      </v-btn>
-    </v-toolbar-items>
-    <v-spacer></v-spacer>
-    <v-flex shrink>
+<v-toolbar dense>
+  <v-toolbar-items>
+    <v-combobox
+      class="mr-4"
+      v-model="priceSelection"
+      :items="prices"
+      label="Max. Price"
+      type="number"
+      hint="Set maximum pcm."
+      prefix="£"
+      ></v-combobox>
+    <v-flex>
+      <v-label class="v-input">Max. Duration</v-label>
+      <v-slider class="mr-2"
+                v-model="maxDuration"
+                thumb-label
+                :thumb-size="16"
+                ></v-slider>
+    </v-flex>
+  </v-toolbar-items>
+  <v-spacer></v-spacer>
+  <v-toolbar-items>
+    <v-btn flat :input-value="showMap" @click="toggleMap()">
+      <v-icon>map</v-icon>
+    </v-btn>
+    <v-btn flat :input-value="showDetails" @click="toggleDetails()">
+      <v-icon>description</v-icon>
+    </v-btn>
+    <v-btn flat :input-value="showList" @click="toggleList()">
+      <v-icon>list</v-icon>
+    </v-btn>
+  </v-toolbar-items>
+  <v-spacer></v-spacer>
+  <v-flex shrink>
     <v-text-field
       v-model="propertyIndex"
       :rules="[indexRule]"
@@ -33,8 +41,8 @@
       class="text-lg-right"
       style="width: 7em"
       ></v-text-field>
-    </v-flex>
-  </v-toolbar>
+  </v-flex>
+</v-toolbar>
 </template>
 
 <script lang="ts">
@@ -42,6 +50,7 @@
 import { State, Action, namespace } from 'vuex-class'
 
 const propns = namespace('properties')
+const dirns = namespace('directions')
 
 @Component
 export default class SearchBar extends Vue {
@@ -57,6 +66,8 @@ export default class SearchBar extends Vue {
   @propns.Action toggleMap
   @propns.Action toggleDetails
   @propns.Action toggleList
+  @dirns.State('maxDuration') _maxDuration
+  @dirns.Mutation setMaxDuration
   
   prices = [1000, 1200, 1300, 1350, 1400, 1421, 1450, 1500]
   get priceSelection () {
@@ -81,5 +92,15 @@ export default class SearchBar extends Vue {
   indexRule (index) {
     return (index > 0 && index <= this.properties.length) || 'Invalid index.'
   }
+  
+  set maxDuration (maxDuration: number) {
+    const dur = maxDuration * 60
+    this.setMaxDuration(dur)
+  }
+  
+  get maxDuration () {
+    return this._maxDuration / 60
+  }
+
 }
 </script>

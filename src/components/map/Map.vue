@@ -5,27 +5,6 @@
   <l-control class="leaflet-control-layers" position="topright" >
     <a class="leaflet-control-layers-toggle" href="#" title="Colormaps" v-if="!controlHover" @click="controlHover = true"></a>
     <v-card v-else class="pa-2">
-      <v-subheader>Max time (m)</v-subheader>
-      <v-layout row>
-        <v-flex class="pr-3">
-          <v-slider
-            v-model="maxDurationSelection"
-            v-on:start="startMaxDurationSelect"
-            v-on:end="endMaxDurationSelect"
-          ></v-slider>
-        </v-flex>
-        <v-flex shrink style="width: 60px">
-          <v-text-field
-            v-model="maxDurationSelection"
-            class="mt-0"
-            hide-details
-            single-line
-            readonly
-            type="number"
-          ></v-text-field>
-        </v-flex>
-      </v-layout>
-
       <v-combobox
         v-model="colormap"
         :items="colormaps"
@@ -34,6 +13,7 @@
         attach=".boxhere">
       </v-combobox>
       <div class="boxhere"></div>
+      <v-btn @click="loadToWork()">Load</v-btn>
       <v-btn @click="controlHover = false">Close</v-btn>
     </v-card>
   </l-control>
@@ -115,7 +95,6 @@ export default class Map extends Vue {
   selectedIcon = redIcon
   bannedIcon = greyIcon
   controlHover = false
-  maxDurationSliding = false
   routeareastyle = {
     weight: 2,
     color: "cyan",
@@ -149,7 +128,6 @@ export default class Map extends Vue {
   
   beforeMount () {
     this.getColormaps()
-    this.getArea()
   }
   
   disableShit (e) {
@@ -163,33 +141,21 @@ export default class Map extends Vue {
   set colormap (colormap: string) {
     if this._colormap !== colormap {
       this.setColormap(colormap)
-      this.getToWorkDurations()
-      this.getArea()
     }
   }
   
-  get maxDurationSelection () {
+  get maxDuration () {
     return this._maxDuration / 60
   }
   
-  set maxDurationSelection (maxDuration: number) {
-    if (!this.maxDurationSliding) {
-      const dur = maxDuration * 60
-      if this._maxDuration !== dur {
-        this.setMaxDuration(dur)
-        this.getToWorkDurations()
-        this.getArea()
-      }
-    }
+  loadToWork () {
+    this.getArea()
+    this.getToWorkDurations()
   }
   
-  startMaxDurationSelect (maxDuration: number) {
-    this.maxDurationSliding = true
-  }
-  
-  endMaxDurationSelect (maxDuration: number) {
-    this.maxDurationSliding = false
-    this.maxDurationSelection = maxDuration
+  set maxDuration (maxDuration: number) {
+    const dur = maxDuration * 60
+    this.setMaxDuration(dur)
   }
   
   propIcon (prop: Property) {
