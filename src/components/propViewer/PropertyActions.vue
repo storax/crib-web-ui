@@ -12,6 +12,9 @@
     <v-flex>
       <ViewBtn :property="property"></ViewBtn>
     </v-flex>
+    <v-flex>
+      <a :href="floorplanimage" target="_blank">Download Floorplan</a>
+    <v-flex>
   </v-layout>
 </template>
 
@@ -32,5 +35,9 @@ import DirectionsBtn from './DirectionsBtn'
 }})
 export default class PropertyActions extends Vue {
   @Prop(Property) property: Property
+
+  get floorplanimage () {
+    return this.property.floorplanImages[0]
+  }
 }
 </script>

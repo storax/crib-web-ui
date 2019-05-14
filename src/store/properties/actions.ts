@@ -7,7 +7,7 @@ export const actions: ActionTree<PropertiesState, RootState> = {
   getProperties ({ state, dispatch, commit, rootState }) {
     commit('propertyRequest')
 
-    propertiesService.find(state.maxPrice, rootState.directions.maxDuration)
+    propertiesService.find(state.maxPrice, rootState.directions.maxDuration, state.onlyFavorite)
       .then(
         (properties: Property[]) => {
           commit('setProperties', properties)

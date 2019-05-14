@@ -7,6 +7,7 @@ export interface PropertiesState {
   showDetails: boolean
   showList: boolean
   maxPrice: number
+  onlyFavorite: boolean
 }
 
 export interface Price {

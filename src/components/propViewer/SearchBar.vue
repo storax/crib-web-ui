@@ -21,6 +21,14 @@
                 :thumb-size="16"
                 ></v-slider>
     </v-flex>
+    <v-btn
+      flat
+      icon
+      :input-value="onlyFavorite"
+      @click="toggleOnlyFavorite()"
+      :color="onlyFavorite ? 'pink' : 'white'">
+      <v-icon>favorite</v-icon>
+    </v-btn>
   </v-toolbar-items>
   <v-spacer></v-spacer>
   <v-toolbar-items>
@@ -66,6 +74,8 @@ export default class SearchBar extends Vue {
   @propns.State showMap
   @propns.State showDetails
   @propns.State showList
+  @propns.State onlyFavorite
+  @propns.Mutation setOnlyFavorite
   @propns.Action setCurrentProperty
   @propns.Action toggleMap
   @propns.Action toggleDetails
@@ -104,6 +114,10 @@ export default class SearchBar extends Vue {
   
   get maxDuration () {
     return this._maxDuration / 60
+  }
+  
+  toggleOnlyFavorite () {
+    this.setOnlyFavorite(!this.onlyFavorite)
   }
 
 }
