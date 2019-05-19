@@ -1,11 +1,12 @@
 <template>
 <v-toolbar dense>
   <v-toolbar-items>
-    <v-btn flat @click="getProperties">
+    <v-btn class="teal darken-2" flat @click="getProperties">
       <v-icon>search</v-icon>
     </v-btn>
     <v-combobox
-      class="mr-4"
+      class="mr-4 ml-4"
+      style="width: 7em"
       v-model="priceSelection"
       :items="prices"
       label="Max. Price"
