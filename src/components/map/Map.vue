@@ -194,6 +194,15 @@ export default class Map extends Vue {
   get getProps (): Property[] {
     return this.properties
   }
+
+  centerProperty () {
+    const latLng = L.latLng(this.currentProperty.location.latitude, this.currentProperty.location.longitude)
+    this.$refs.map.mapObject.setView(latLng, 14)
+  }
+
+  centerMap () {
+    this.$refs.map.mapObject.setView([51.505, -0.09], 12)
+  }
 }
 </script>
 <style scoped>

@@ -6,7 +6,7 @@
       </v-flex>
       <v-layout>
         <v-flex v-if="showMap" style="max-width: 60%; width: 60%">
-          <Map @propertyClicked="showProperty($event)"></Map>
+          <Map ref="map" @propertyClicked="showProperty($event)"></Map>
         </v-flex>
         <v-flex v-if="showList">
           <PropertyList></PropertyList>
@@ -69,6 +69,7 @@ export default class PropertyMapViewer extends Vue {
   
   $refs!: {
     details: PropertyDetails,
+    map: Map
   }
   
   get propertiesJSON () {
@@ -88,25 +89,52 @@ export default class PropertyMapViewer extends Vue {
   }
   
   onKey (event) {
-    if (event.keyCode === 77) { // m
-      this.toggleMap()
-    } else if (event.keyCode === 72) { // h
-      this.$refs.details.prevImage()
-    } else if (event.keyCode === 76) { // l
-      this.$refs.details.nextImage()
-    } else if (event.keyCode === 73) { // i
-      this.$refs.details.toggleFullscreenImages()
-    } else if (event.keyCode === 66) { // b
-      this.ban(this.currentProperty)
-    } else if (event.keyCode === 68) { // d
-      this.getToWork(this.currentProperty)
-    } else if (event.keyCode === 70) { // f
-      this.favorite(this.currentProperty)
-    } else if (event.keyCode === 78) { // n
-      this.nextProperty()
-    } else if (event.keyCode === 80) { // p
-      this.prevProperty()
+    switch (event.keyCode) {
+      case 77: { // m
+        this.toggleMap()
+        break
+      }
+      case 72: { // h
+        this.$refs.details.prevImage()
+        break
+      }
+      case 76: { // l
+        this.$refs.details.nextImage()
+        break
+      }
+      case 73: { // i
+        this.$refs.details.toggleFullscreenImages()
+        break
+      }
+      case 66: { // b
+        this.ban(this.currentProperty)
+        break
+      }
+      case 68: { // d
+        this.getToWork(this.currentProperty)
+        break
+      }
+      case 70: { // f
+        this.favorite(this.currentProperty)
+        break
+      }
+      case 78: { // n
+        this.nextProperty()
+        break
+      }
+      case 80: { // p
+        this.prevProperty()
+        break
+      }
+      case 90: { // z
+        this.$refs.map.centerProperty()
+        break
+      }
+      case 48: { // 0
+        this.$refs.map.centerMap()
+        break
+      }
     }
-}
+  }
 }
 </script>

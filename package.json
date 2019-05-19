@@ -29,14 +29,14 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
-    "@mapbox/polyline": "^1.0.0",
+    "@mapbox/polyline": "^1.1.0",
     "axios": "^0.18.0",
     "jquery": "^3.4.1",
-    "leaflet": "^1.4.0",
+    "leaflet": "^1.5.1",
     "slick": "^1.12.2",
     "swiper": "^4.5.0",
     "tinygradient": "^1.0.0",
-    "vee-validate": "^2.2.6",
+    "vee-validate": "^2.2.7",
     "vue": "^2.6.10",
     "vue-class-component": "^6.3.2",
     "vue-hot-reload-api": "^2.3.3",
@@ -45,7 +45,7 @@
     "vue-slick": "^1.1.15",
     "vue2-leaflet": "^1.2.3",
     "vuetify": "^1.5.14",
-    "vuex": "^3.1.0",
+    "vuex": "^3.1.1",
     "vuex-class": "^0.3.2"
   },
   "browserslist": [
