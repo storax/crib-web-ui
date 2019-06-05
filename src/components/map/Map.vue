@@ -1,5 +1,5 @@
 <template>
-<l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0" class="maxheight">
+<l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0" class="maxheight" :options="{ drawControl: false }">
   <l-control-layers position="topright" :hideSingleBase="true"></l-control-layers>
   <l-tile-layer :url="url" :attribution="attribution" layerType="base" name="Map"></l-tile-layer>
   <l-control class="leaflet-control-layers" position="topright" >
@@ -40,6 +40,7 @@
       :options-style="routeareastyle"
       ></l-geo-json>
   </l-layer-group>
+  <l-feature-group ref="drawnArea"/>
 </l-map>
 </template>
 
@@ -55,10 +56,13 @@ import {
   LTooltip,
   LPolyline,
   LGeoJson,
-  LControl
+  LControl,
+  LFeatureGroup
 } from 'vue2-leaflet'
 import { State, Action, namespace } from 'vuex-class'
 import * as polyline from '@mapbox/polyline'
+import LDraw from 'leaflet-draw';
+import "leaflet-draw/dist/leaflet.draw.css";
 
 import { Property, RouteData } from '../../store/properties/types'
 import Route from './Route'
@@ -78,6 +82,7 @@ const dirns = namespace('directions')
   LTooltip,
   LControl,
   LGeoJson,
+  LFeatureGroup,
   Route,
   DurationsField,
 }})
@@ -106,6 +111,8 @@ export default class Map extends Vue {
   @propns.State properties
   @propns.State currentProperty
   @propns.Getter isCurrentProperty
+  @propns.Mutation setSearchArea
+  @propns.Action getProperties
   @dirns.State mapRaster
   @dirns.State('colormap') _colormap
   @dirns.State colormaps
@@ -120,6 +127,7 @@ export default class Map extends Vue {
   
   $refs!: {
     map: LMap,
+    drawnArea: LFeatureGroup,
   }
   
   onResize () {
@@ -203,6 +211,57 @@ export default class Map extends Vue {
   centerMap () {
     this.$refs.map.mapObject.setView([51.505, -0.09], 12)
   }
+
+  mounted() {
+    this.$nextTick(() => {
+      const map = this.$refs.map.mapObject
+      console.log(LDraw)
+      const drawControl = new L.Control.Draw({
+        position: 'topright',
+        draw: {
+          polygon: {
+            allowIntersection: false,
+            showArea: true
+          },
+          polyline : false,
+          rectangle : false,
+          circle : false,
+          marker: false,
+          circlemarker: false
+        },
+        edit: {
+          featureGroup: this.$refs.drawnArea.mapObject,
+          poly: {
+            allowIntersection: false
+          }
+        }
+      })
+
+      map.addControl(drawControl)
+
+      map.on(L.Draw.Event.CREATED, (e) => {
+        const layer = e.layer
+
+        this.$refs.drawnArea.mapObject.addLayer(layer)
+        console.log(this.$refs.drawnArea.mapObject.toGeoJSON())
+        this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
+        this.getProperties()
+      })
+      map.on(L.Draw.Event.EDITED, (e) => {
+        const layer = e.layer
+
+        console.log(this.$refs.drawnArea.mapObject.toGeoJSON())
+        this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
+        this.getProperties()
+      })
+      map.on(L.Draw.Event.DELETED, (e) => {
+        const layer = e.layer
+
+        console.log(this.$refs.drawnArea.mapObject.toGeoJSON())
+        this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
+        this.getProperties()
+      })
+    })
 }
 </script>
 <style scoped>

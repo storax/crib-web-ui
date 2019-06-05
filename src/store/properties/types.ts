@@ -8,6 +8,7 @@ export interface PropertiesState {
   showList: boolean
   maxPrice: number
   onlyFavorite: boolean
+  searchArea: Object | null
 }
 
 export interface Price {

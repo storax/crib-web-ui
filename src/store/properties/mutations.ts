@@ -60,4 +60,7 @@ export const mutations: MutationTree<PropertiesState> = {
   setOnlyFavorite (state, favorite: boolean) {
     state.onlyFavorite = favorite
   },
+  setSearchArea (state, area: Object) {
+    state.searchArea = area
+  }
 }

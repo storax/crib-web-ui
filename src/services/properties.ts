@@ -2,14 +2,15 @@ import { cribReq } from '../utils'
 import { Property } from '../store/properties/types'
 
 export const propertiesService = {
-  find: (maxPrice: number, maxDuration: number, favorite: boolean) => {
+  find: (maxPrice: number, maxDuration: number, favorite: boolean, area: Object) => {
     const config = {
       method: 'post',
       url: '/properties/find',
       data: {
         max_price: maxPrice,
         max_duration: maxDuration,
-        favorite: favorite || null
+        favorite: favorite || null,
+        area: area
       }
     }
     return cribReq(config)

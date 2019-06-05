@@ -15,6 +15,7 @@ export const state: PropertiesState = {
   showList: true,
   maxPrice: 1450
   onlyFavorite: false,
+  searchArea: null
 }
 
 const namespaced: boolean = true
