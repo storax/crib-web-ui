@@ -75,24 +75,30 @@ export default class PropertyList extends Vue {
   @propns.State currentProperty
   @propns.State currentIndex
   @propns.Action setCurrentProperty
-  
+
   rowsPerPageItems = [4, 8, 12]
   pagination = {
     rowsPerPage: 12,
     page: 1
   }
-  
+
+  mounted () {
+    this.$nextTick(() => {
+      this.adjustPage()
+    }
+  }
+
   @Watch('currentIndex')
   onChange (newVal) {
     this.adjustPage()
     // this.$vuetify.goTo('#listentry' + this.currentIndex % this.pagination.rowsPerPage, {offset: -100})
   }
-  
+
   adjustPage () {
     const pag = this.pagination
     const oldpage = this.pagination.page
     pag.page = Math.ceil((this.currentIndex + 1) / pag.rowsPerPage)
-    if (pag.page != oldpage) {
+    if (pag.page !== oldpage) {
       this.pagination = pag
     }
   }
