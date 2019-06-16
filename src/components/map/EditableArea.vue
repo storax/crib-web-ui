@@ -1,27 +1,26 @@
 <template>
-  <l-feature-group ref="drawnArea"/>
+  <l-geo-json ref="drawnArea" :geojson="searchAreaGeoJson"/>
 </template>
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator'
 import {
   L,
-  LFeatureGroup
+  LGeoJson
 } from 'vue2-leaflet'
 import { namespace } from 'vuex-class'
 import 'leaflet-draw'
 import 'leaflet-draw/dist/leaflet.draw.css'
 
 const propns = namespace('properties')
-const dirns = namespace('directions')
 
 @Component({components: {
-  LFeatureGroup
+  LGeoJson
 }})
 export default class EditableArea extends Vue {
   @propns.Mutation setSearchArea
   @propns.Action getProperties
-  @dirns.State('area') routearea
+  @propns.State searchArea
 
   drawControl = null
   routeareastyle = {
@@ -33,11 +32,15 @@ export default class EditableArea extends Vue {
   }
 
   $refs!: {
-    drawnArea: LFeatureGroup
+    drawnArea: LGeoJson
   }
 
   get map () {
     return this.$refs.drawnArea.parentContainer.mapObject
+  }
+
+  get searchAreaGeoJson () {
+    return this.searchArea || { type: 'FeatureCollection', features: [] }
   }
 
   mounted () {
