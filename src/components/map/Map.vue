@@ -40,12 +40,12 @@
       :options-style="routeareastyle"
       ></l-geo-json>
   </l-layer-group>
-  <l-feature-group ref="drawnArea"/>
+  <EditableArea/>
 </l-map>
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Emit, Watch } from 'vue-property-decorator'
+import { Component, Vue, Emit, Watch } from 'vue-property-decorator'
 import {
   LLayerGroup,
   LControlLayers,
@@ -61,12 +61,11 @@ import {
 } from 'vue2-leaflet'
 import { State, Action, namespace } from 'vuex-class'
 import * as polyline from '@mapbox/polyline'
-import LDraw from 'leaflet-draw';
-import "leaflet-draw/dist/leaflet.draw.css";
 
 import { Property, RouteData } from '../../store/properties/types'
 import Route from './Route'
 import DurationsField from './DurationsField'
+import EditableArea from './EditableArea'
 import { redIcon, greenIcon, greyIcon } from './icons'
 
 const propns = namespace('properties')
@@ -85,6 +84,7 @@ const dirns = namespace('directions')
   LFeatureGroup,
   Route,
   DurationsField,
+  EditableArea
 }})
 export default class Map extends Vue {
   url: string = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png' +
@@ -127,7 +127,6 @@ export default class Map extends Vue {
   
   $refs!: {
     map: LMap,
-    drawnArea: LFeatureGroup,
     durfieldlayer: LLayerGroup,
     routearealayer: LLayerGroup,
   }
@@ -221,53 +220,8 @@ export default class Map extends Vue {
       const routearealayer = this.$refs.routearealayer.mapObject
       durfieldlayer.remove()
       routearealayer.remove()
-
-      const drawControl = new L.Control.Draw({
-        position: 'topright',
-        draw: {
-          polygon: {
-            allowIntersection: false,
-            showArea: true
-          },
-          polyline : false,
-          rectangle : false,
-          circle : false,
-          marker: false,
-          circlemarker: false
-        },
-        edit: {
-          featureGroup: this.$refs.drawnArea.mapObject,
-          poly: {
-            allowIntersection: false
-          }
-        }
-      })
-
-      map.addControl(drawControl)
-
-      map.on(L.Draw.Event.CREATED, (e) => {
-        const layer = e.layer
-
-        this.$refs.drawnArea.mapObject.addLayer(layer)
-        console.log(this.$refs.drawnArea.mapObject.toGeoJSON())
-        this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
-        this.getProperties()
-      })
-      map.on(L.Draw.Event.EDITED, (e) => {
-        const layer = e.layer
-
-        console.log(this.$refs.drawnArea.mapObject.toGeoJSON())
-        this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
-        this.getProperties()
-      })
-      map.on(L.Draw.Event.DELETED, (e) => {
-        const layer = e.layer
-
-        console.log(this.$refs.drawnArea.mapObject.toGeoJSON())
-        this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
-        this.getProperties()
-      })
     })
+  }
 }
 </script>
 <style scoped>
