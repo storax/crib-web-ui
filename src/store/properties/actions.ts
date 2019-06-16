@@ -1,13 +1,13 @@
 import { ActionTree } from 'vuex'
-import { PropertiesState, Property, RouteData } from './types'
+import { PropertiesState, Property, RouteData, SearchArea } from './types'
 import { RootState } from '../types'
 import { propertiesService } from '../../services'
 
 export const actions: ActionTree<PropertiesState, RootState> = {
-  getProperties ({ state, dispatch, commit, rootState }) {
+  getProperties ({ state, dispatch, commit, getters, rootState }) {
     commit('propertyRequest')
 
-    propertiesService.find(state.maxPrice, rootState.directions.maxDuration, state.onlyFavorite, state.searchArea)
+    propertiesService.find(state.maxPrice, rootState.directions.maxDuration, state.onlyFavorite, getters.searchArea.geojson)
       .then(
         (properties: Property[]) => {
           commit('setProperties', properties)
@@ -70,6 +70,26 @@ export const actions: ActionTree<PropertiesState, RootState> = {
         () => {
           commit('ban', { property: property })
         },
+        error => {
+          dispatch('alert/error', error.message, { root: true })
+        })
+  },
+  getSearchAreas ({ dispatch, commit }) {
+    propertiesService.searchAreas()
+      .then(
+        (searchAreas: SearchArea[]) => {
+          commit('setSearchAreas', searchAreas || [])
+        },
+        error => {
+          dispatch('alert/error', error.message, { root: true })
+        })
+  },
+  setSearchArea ({ dispatch, commit }, searcharea) {
+    commit('setSearchArea', searcharea)
+    dispatch('getProperties')
+    propertiesService.saveSearchArea(searcharea.name, searcharea.geojson)
+      .then(
+        () => {},
         error => {
           dispatch('alert/error', error.message, { root: true })
         })

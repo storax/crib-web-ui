@@ -18,10 +18,11 @@ const propns = namespace('properties')
   LGeoJson
 }})
 export default class EditableArea extends Vue {
-  @propns.Mutation setSearchArea
+  @propns.Action setSearchArea
   @propns.Action getProperties
-  @propns.State searchArea
-
+  @propns.Getter searchArea
+  @propns.State searchAreaName
+  
   drawControl = null
   routeareastyle = {
     weight: 2,
@@ -30,22 +31,22 @@ export default class EditableArea extends Vue {
     fillColor: 'cyan',
     fillOpacity: 0.2
   }
-
+  
   $refs!: {
     drawnArea: LGeoJson
   }
-
+  
   get map () {
     return this.$refs.drawnArea.parentContainer.mapObject
   }
-
+  
   get searchAreaGeoJson () {
-    return this.searchArea || { type: 'FeatureCollection', features: [] }
+    return this.searchArea.geojson || { type: 'FeatureCollection', features: [] }
   }
-
+  
   mounted () {
     this.$nextTick(() => {
-
+      
       this.drawControl = new L.Control.Draw({
         position: 'topright',
         draw: {
@@ -66,32 +67,32 @@ export default class EditableArea extends Vue {
           }
         }
       })
-
+      
       this.map.addControl(this.drawControl)
-
+      
       this.map.on(L.Draw.Event.CREATED, this.onDrawCreated)
       this.map.on(L.Draw.Event.EDITED, this.onDrawEdited)
       this.map.on(L.Draw.Event.DELETED, this.onDrawDeleted)
     })
   }
-
+  
   onDrawCreated (e) {
     const layer = e.layer
     this.$refs.drawnArea.mapObject.addLayer(layer)
-    this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
+    this.setSearchArea({name: this.searchAreaName, geojson: this.$refs.drawnArea.mapObject.toGeoJSON()})
     this.getProperties()
-
+    
   }
-
+  
   onDrawEdited (e) {
     const layer = e.layer
-    this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
+    this.setSearchArea({name: this.searchAreaName, geojson: this.$refs.drawnArea.mapObject.toGeoJSON()})
     this.getProperties()
   }
-
+  
   onDrawDeleted (e) {
     const layer = e.layer
-    this.setSearchArea(this.$refs.drawnArea.mapObject.toGeoJSON())
+    this.setSearchArea({name: this.searchAreaName, geojson: this.$refs.drawnArea.mapObject.toGeoJSON()})
     this.getProperties()
   }
 

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { MutationTree } from 'vuex'
-import { PropertiesState, Property } from './types'
+import { PropertiesState, Property, SearchArea } from './types'
 
 export const mutations: MutationTree<PropertiesState> = {
   propertyRequest (state) {
@@ -60,7 +60,24 @@ export const mutations: MutationTree<PropertiesState> = {
   setOnlyFavorite (state, favorite: boolean) {
     state.onlyFavorite = favorite
   },
-  setSearchArea (state, area: Object) {
-    state.searchArea = area
+  setSearchAreas (state, areas) {
+    if (areas.length) {
+      state.searchAreas = areas
+      state.searchAreaName = areas[0].name
+    } else {
+      state.searchAreas = [{ name: 'default', geojson: { type: 'FeatureCollection', features: []}}]
+      state.searchAreaName = 'default'
+    }
+  },
+  setSearchArea (state, {name, geojson}) {
+    const searchAreas = state.searchAreas
+    const existing = searchAreas.find((i: SearchArea) => i.name === name)
+    if (existing) {
+      existing.geojson = geojson
+    } else {
+      searchAreas.push({'name': name, geojson: geojson})
+    }
+    state.searchAreas = searchAreas
+    state.searchAreaName = name
   }
 }

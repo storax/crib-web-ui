@@ -15,7 +15,8 @@ export const state: PropertiesState = {
   showList: true,
   maxPrice: 1450
   onlyFavorite: false,
-  searchArea: null
+  searchAreaName: 'default',
+  searchAreas: [{ name: 'default', geojson: { type: 'FeatureCollection', features: []}}]
 }
 
 const namespaced: boolean = true

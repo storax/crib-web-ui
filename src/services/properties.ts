@@ -91,5 +91,25 @@ export const propertiesService = {
     }
     return cribReq(config)
       .then(response => {return response.data})
+  },
+  searchAreas: () => {
+    const config = {
+      method: 'get',
+      url: '/properties/get_search_areas',
+    }
+    return cribReq(config)
+      .then(response => { return response.data.areas })
+  },
+  saveSearchArea: (name: string, geojson: Object) => {
+    const config = {
+      method: 'post',
+      url: '/properties/save_search_area',
+      data: {
+        name: name,
+        geojson: geojson
+      }
+    }
+    return cribReq(config)
+      .then(response => {return response.data})
   }
 }

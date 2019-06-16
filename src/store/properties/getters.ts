@@ -11,5 +11,9 @@ export const getters: GetterTree<PropertiesState, RootState> = {
       const { currentProperty } = state
       return currentProperty ? (currentProperty.id === property.id) : false
     }
+  },
+  searchArea (state) {
+    const area = state.searchAreas.find(i => i.name === state.searchAreaName)
+    return area ? area : {name: state.searchAreaName, geojson: { type: 'FeatureCollection', features: [] } }
   }
 }

@@ -8,7 +8,13 @@ export interface PropertiesState {
   showList: boolean
   maxPrice: number
   onlyFavorite: boolean
-  searchArea: Object | null
+  searchAreaName: string | null
+  searchAreas: SearchArea[]
+}
+
+export interface SearchArea {
+  name: string
+  geojson: Object
 }
 
 export interface Price {

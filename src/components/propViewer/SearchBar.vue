@@ -30,6 +30,13 @@
       :color="onlyFavorite ? 'pink' : 'white'">
       <v-icon>favorite</v-icon>
     </v-btn>
+    <v-combobox
+      class="mr-4 ml-4"
+      style="width: 7em"
+      :items="searchAreas"
+      v-model="searchArea"
+      label="Search Areas"
+      ></v-combobox>
   </v-toolbar-items>
   <v-spacer></v-spacer>
   <v-toolbar-items>
@@ -76,6 +83,10 @@ export default class SearchBar extends Vue {
   @propns.State showDetails
   @propns.State showList
   @propns.State onlyFavorite
+  @propns.Getter('searchArea') _searchArea
+  @propns.State('searchAreas') _searchAreas
+  @propns.Action getSearchAreas
+  @propns.Action setSearchArea
   @propns.Mutation setOnlyFavorite
   @propns.Action setCurrentProperty
   @propns.Action toggleMap
@@ -97,6 +108,24 @@ export default class SearchBar extends Vue {
     return this.currentIndex + 1
   }
   
+  get searchAreas () {
+    const areas = []
+    for (let i of this._searchAreas) {
+      areas.push(i.name)
+    }
+    return areas
+  }
+  
+  get searchArea () {
+    return this.searchAreaName || "default"
+  }
+  
+  set searchArea (value) {
+    const existing = this._searchAreas.find(i => i.name === value)
+    const geojson = existing ? existing.geojson : this._searchArea.geojson
+    this.setSearchArea({name: value, geojson: geojson})
+  }
+
   set propertyIndex (index) {
     if (this.indexRule(index) === true) {
       const prop = this.properties[index - 1]
@@ -120,6 +149,9 @@ export default class SearchBar extends Vue {
   toggleOnlyFavorite () {
     this.setOnlyFavorite(!this.onlyFavorite)
   }
-
+  
+  created () {
+    this.getSearchAreas()
+  }
 }
 </script>
