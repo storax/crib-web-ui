@@ -2,7 +2,7 @@
 <l-map ref="map" v-resize="onResize" :zoom="zoom" :center="center" style="z-index: 0" class="maxheight" :options="{ drawControl: false }">
   <l-control-layers position="topright" :hideSingleBase="true"></l-control-layers>
   <l-tile-layer :url="url" :attribution="attribution" layerType="base" name="Map"></l-tile-layer>
-  <l-control class="leaflet-control-layers" position="topright" >
+  <l-control class="leaflet-control-layers" position="topright">
     <a class="leaflet-control-layers-toggle" href="#" title="Colormaps" v-if="!controlHover" @click="controlHover = true"></a>
     <v-card v-else class="pa-2">
       <v-combobox
@@ -17,7 +17,7 @@
       <v-btn @click="controlHover = false">Close</v-btn>
     </v-card>
   </l-control>
-  <l-layer-group layerType="overlay" name="Time to Work">
+  <l-layer-group ref="durfieldlayer" layerType="overlay" name="Time to Work">
     <DurationsField></DurationsField>
   </l-layer-group>
   <l-layer-group layerType="overlay" name="Properties">
@@ -34,7 +34,7 @@
   <l-layer-group layerType="overlay" name="Routes">
     <Route :route="route"></Route>
   </l-layer-group>
-  <l-layer-group layerType="overlay" name="Route Area">
+  <l-layer-group ref="routearealayer" layerType="overlay" name="Route Area">
     <l-geo-json
       :geojson="routearea"
       :options-style="routeareastyle"
@@ -128,6 +128,8 @@ export default class Map extends Vue {
   $refs!: {
     map: LMap,
     drawnArea: LFeatureGroup,
+    durfieldlayer: LLayerGroup,
+    routearealayer: LLayerGroup,
   }
   
   onResize () {
@@ -215,7 +217,11 @@ export default class Map extends Vue {
   mounted() {
     this.$nextTick(() => {
       const map = this.$refs.map.mapObject
-      console.log(LDraw)
+      const durfieldlayer = this.$refs.durfieldlayer.mapObject
+      const routearealayer = this.$refs.routearealayer.mapObject
+      durfieldlayer.remove()
+      routearealayer.remove()
+
       const drawControl = new L.Control.Draw({
         position: 'topright',
         draw: {
