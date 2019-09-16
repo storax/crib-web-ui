@@ -15,6 +15,12 @@ The frontend for `crib <https://github.com/storax/crib>`_.
 
    Map view with scraped routes to work.
 
+.. figure:: assets/crib_map2.jpg
+   :scale: 50 %
+   :alt: Crib map view with drawn search areas.
+
+   Map view with drawn search areas.
+
 Requirements
 ------------
 
