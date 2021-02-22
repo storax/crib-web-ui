@@ -13,7 +13,7 @@ export const state: PropertiesState = {
   showMap: false,
   showDetails: true,
   showList: true,
-  maxPrice: 1450
+  maxPrice: 1450,
   onlyFavorite: false,
   searchAreaName: 'default',
   searchAreas: [{ name: 'default', geojson: { type: 'FeatureCollection', features: []}}]
